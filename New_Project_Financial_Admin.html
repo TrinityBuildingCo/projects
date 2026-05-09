@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>::New Project Name:: — Financial Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#FAF8F5;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2C2C2A;min-height:100vh;-webkit-font-smoothing:antialiased;font-size:14px}
+.header{background:#2C2C2A;padding:22px 24px 18px}
+.header-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.eyebrow{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#A08B5B;font-weight:400;margin-bottom:4px}
+.header-title{font-size:22px;font-weight:500;color:#FAF8F5}
+.header-sub{font-size:13px;color:#8A8070;margin-top:3px}
+.header-badge{background:#5A6A8A;color:#FAF8F5;font-size:11px;font-weight:500;padding:4px 12px;border-radius:2px;letter-spacing:0.08em;text-transform:uppercase}
+.tabs{background:#FAF8F5;border-bottom:1px solid #DDD8CF;padding:0 24px}
+.tabs-inner{max-width:1300px;margin:0 auto;display:flex}
+.tab-btn{padding:14px 20px;font-size:13px;font-weight:400;color:#8A8070;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:0.02em;transition:all 0.15s;white-space:nowrap}
+.tab-btn:hover{color:#2C2C2A}
+.tab-btn.active{color:#A08B5B;border-bottom-color:#A08B5B;font-weight:500}
+.tab-content{display:none;max-width:1300px;margin:0 auto;padding:20px 20px 60px}
+.tab-content.active{display:block}
+.bt-layout{display:grid;grid-template-columns:1fr 400px;gap:20px;align-items:start}
+@media(max-width:1000px){.bt-layout{grid-template-columns:1fr}}
+.card{background:white;border-radius:4px;border:1px solid #DDD8CF;overflow:hidden;box-shadow:0 1px 4px rgba(44,44,42,0.04)}
+.card-header{padding:14px 18px;border-bottom:1px solid #DDD8CF;background:#FDFCFA;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.card-title{font-size:15px;font-weight:500;color:#2C2C2A}
+.card-sub{font-size:12px;color:#8A8070;margin-top:2px}
+.form-group{margin-bottom:12px}
+.form-label{display:block;font-size:11px;font-weight:400;color:#8A8070;margin-bottom:4px;letter-spacing:0.06em;text-transform:uppercase}
+.form-label .opt{color:#C0B8AC;font-weight:300}
+.form-input,.form-select,.form-textarea{width:100%;padding:8px 11px;background:white;border:1px solid #DDD8CF;border-radius:3px;color:#2C2C2A;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;outline:none;transition:border-color 0.15s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:#A08B5B;box-shadow:0 0 0 2px rgba(160,139,91,0.12)}
+.form-input::placeholder{color:#C0B8AC}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%238A8070' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;cursor:pointer}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.cost-wrap{position:relative}
+.cost-wrap .currency{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#8A8070;font-size:13px;pointer-events:none}
+.cost-wrap .form-input{padding-left:22px}
+.section-divider{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#A08B5B;padding:5px 0 7px;border-bottom:1px solid #EDE9E2;margin-bottom:11px;margin-top:3px}
+.btn-primary{padding:9px 18px;background:#2C2C2A;border:none;border-radius:3px;color:#FAF8F5;font-size:12px;font-weight:400;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;transition:background 0.15s;letter-spacing:0.08em;text-transform:uppercase}
+.btn-primary:hover{background:#A08B5B}
+.btn-primary:disabled{background:#C0B8AC;cursor:not-allowed}
+.btn-sm{padding:4px 10px;background:white;border:1px solid #DDD8CF;border-radius:3px;font-size:12px;font-weight:400;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;color:#8A8070;transition:all 0.15s;white-space:nowrap}
+.btn-sm:hover{background:#F0EDE8;border-color:#A08B5B;color:#A08B5B}
+.btn-sm.danger{border-color:#E8D0D0;color:#A86060}
+.btn-sm.danger:hover{background:#FAF0F0;border-color:#A84040;color:#A84040}
+/* Scope list — right panel */
+.scope-list-panel{position:sticky;top:20px}
+.list-controls{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid #DDD8CF;background:#FDFCFA;flex-wrap:wrap;align-items:center}
+.list-search{flex:1;min-width:100px;padding:7px 10px;background:white;border:1px solid #DDD8CF;border-radius:3px;color:#2C2C2A;font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;outline:none}
+.list-search:focus{border-color:#A08B5B}
+.list-filter{padding:7px 10px;background:white;border:1px solid #DDD8CF;border-radius:3px;color:#8A8070;font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;outline:none;cursor:pointer}
+.unmapped-btn{padding:6px 10px;background:white;border:1px solid #DDD8CF;border-radius:3px;font-size:11px;font-weight:400;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;color:#8A8070;transition:all 0.15s;white-space:nowrap}
+.unmapped-btn.active{background:#FDF0D8;border-color:#C4913A;color:#9A6E20}
+.list-count{font-size:11px;color:#8A8070;white-space:nowrap;font-family:'DM Mono',monospace}
+.scope-list-body{max-height:calc(100vh - 260px);overflow-y:auto}
+.list-room-hdr{padding:7px 14px 4px;font-size:11px;font-weight:600;color:#2C2C2A;letter-spacing:0.08em;text-transform:uppercase;background:#F5F2EE;border-bottom:1px solid #DDD8CF;border-top:1px solid #EDE9E2;position:sticky;top:0;z-index:1}
+.scope-row{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid #F0EDE8;cursor:pointer;transition:background 0.1s;user-select:none}
+.scope-row:hover{background:#F5F2EE}
+.scope-row.selected{background:#F0EDE8;border-left:2px solid #A08B5B}
+.scope-row.unmapped-row{border-left:3px solid #C4913A}
+.scope-row-main{flex:1;min-width:0}
+.scope-row-name{font-size:13px;font-weight:400;color:#2C2C2A;line-height:1.3}
+.scope-row-meta{font-size:11px;color:#8A8070;margin-top:2px}
+.scope-row-desc{font-size:11px;color:#A08B5B;margin-top:2px;font-style:italic}
+.scope-row-costs{display:flex;gap:10px;margin-top:3px}
+.src-item{display:flex;flex-direction:column;gap:1px}
+.src-label{font-size:9px;letter-spacing:0.06em;text-transform:uppercase;color:#C0B8AC}
+.src-val{font-family:'DM Mono',monospace;font-size:11px;color:#8A8070}
+.scope-row-bt{font-size:11px;color:#A08B5B;font-family:'DM Mono',monospace;flex-shrink:0;padding-top:2px}
+.scope-row-unmapped{font-size:11px;color:#C4913A;flex-shrink:0;padding-top:2px}
+.badge{font-size:10px;font-weight:400;padding:2px 6px;border-radius:2px;white-space:nowrap;display:inline-block;margin-top:2px}
+.badge-est{background:#F0EDE8;color:#8A7050}
+.badge-co{background:#FDF0D8;color:#9A6E20;font-weight:500}
+.spinner{width:20px;height:20px;border:1.5px solid #DDD8CF;border-top-color:#A08B5B;border-radius:50%;animation:spin 0.7s linear infinite;margin:28px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.list-empty{text-align:center;padding:36px 20px;color:#8A8070;font-size:13px;font-style:italic}
+/* BT items sub-list */
+.bt-items-list{max-height:240px;overflow-y:auto;border-top:1px solid #EDE9E2}
+.bt-item-row{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:1px solid #F0EDE8}
+.bt-item-row:last-child{border-bottom:none}
+.bt-item-row:hover{background:#FDFCFA}
+.bt-item-main{flex:1;min-width:0}
+.bt-item-title{font-size:12px;font-weight:400;color:#2C2C2A}
+.bt-item-code{font-size:11px;color:#A08B5B;margin-top:1px}
+.bt-item-cost{font-family:'DM Mono',monospace;font-size:11px;color:#8A8070;margin-top:1px}
+.bt-item-actions{display:flex;gap:4px;flex-shrink:0;padding-top:1px}
+.bt-no-items{padding:14px;font-size:12px;color:#C0B8AC;font-style:italic}
+.bt-none-selected{padding:18px;font-size:12px;color:#C0B8AC;font-style:italic;text-align:center}
+/* New BT line button */
+.new-bt-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:#2C2C2A;color:#FAF8F5;border:none;border-radius:3px;font-size:12px;font-weight:400;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;transition:background 0.15s;letter-spacing:0.04em;white-space:nowrap}
+.new-bt-btn:hover{background:#A08B5B}
+.new-bt-btn:disabled{background:#C0B8AC;cursor:not-allowed}
+/* Cost code search dropdown */
+.cc-wrap{position:relative}
+.cc-input{width:100%;padding:8px 11px;background:white;border:1px solid #DDD8CF;border-radius:3px;color:#2C2C2A;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;outline:none;transition:border-color 0.15s}
+.cc-input:focus{border-color:#A08B5B}
+.cc-input::placeholder{color:#C0B8AC}
+.cc-dropdown{position:absolute;top:100%;left:0;right:0;background:white;border:1px solid #DDD8CF;border-top:none;border-radius:0 0 3px 3px;max-height:200px;overflow-y:auto;z-index:50;display:none;box-shadow:0 4px 12px rgba(44,44,42,0.1)}
+.cc-dropdown.open{display:block}
+.cc-cat{padding:5px 11px 2px;font-size:10px;font-weight:500;color:#A08B5B;letter-spacing:0.08em;text-transform:uppercase;background:#FDFCFA;border-bottom:0.5px solid #EDE9E2;position:sticky;top:0}
+.cc-option{padding:7px 11px;font-size:12px;color:#2C2C2A;cursor:pointer;border-bottom:0.5px solid #F0EDE8}
+.cc-option:hover,.cc-option.selected{background:#F5F2EE;color:#A08B5B}
+.cc-empty{padding:12px 11px;font-size:12px;color:#C0B8AC;font-style:italic}
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,44,42,0.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.show{opacity:1;pointer-events:all}
+.modal{background:white;border-radius:4px;padding:22px;width:100%;max-width:580px;box-shadow:0 8px 40px rgba(44,44,42,0.2);max-height:90vh;overflow-y:auto}
+.modal-title{font-size:15px;font-weight:500;color:#2C2C2A;margin-bottom:3px}
+.modal-subtitle{font-size:12px;color:#A08B5B;margin-bottom:16px;font-style:italic}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.btn-cancel{flex:1;padding:9px;background:white;border:1px solid #DDD8CF;border-radius:3px;color:#8A8070;font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer}
+.btn-cancel:hover{background:#F0EDE8}
+.btn-save{flex:2;padding:9px;background:#2C2C2A;border:none;border-radius:3px;color:#FAF8F5;font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;letter-spacing:0.06em;text-transform:uppercase}
+.btn-save:hover{background:#A08B5B}
+/* Selected scope detail */
+#selected-scope-detail{padding:12px 16px;border-bottom:1px solid #EDE9E2;background:#FDFCFA}
+.sd-row{display:flex;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.sd-item{display:flex;flex-direction:column;gap:1px;min-width:0}
+.sd-label{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:#C0B8AC}
+.sd-val{font-size:13px;color:#2C2C2A}
+.sd-val.mono{font-family:'DM Mono',monospace}
+/* Budget preview */
+.budget-header-bar{display:flex;align-items:center;gap:14px;padding:14px 18px;background:white;border:1px solid #DDD8CF;border-radius:4px;margin-bottom:14px;box-shadow:0 1px 4px rgba(44,44,42,0.04);flex-wrap:wrap}
+.markup-label{font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#8A8070;flex-shrink:0}
+.markup-wrap{position:relative;width:90px}
+.markup-input{width:100%;padding:7px 26px 7px 10px;background:white;border:1px solid #DDD8CF;border-radius:3px;font-size:13px;font-family:'DM Mono',monospace;color:#2C2C2A;outline:none;text-align:right}
+.markup-input:focus{border-color:#A08B5B}
+.markup-pct{position:absolute;right:9px;top:50%;transform:translateY(-50%);color:#8A8070;font-size:12px;pointer-events:none}
+.markup-note{font-size:12px;color:#C0B8AC;font-style:italic}
+.budget-totals{display:flex;gap:20px;margin-left:auto;flex-wrap:wrap}
+.bt-total-item{text-align:right}
+.bt-total-label{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#8A8070}
+.bt-total-val{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;color:#2C2C2A;margin-top:2px}
+.bt-total-val.client{color:#A08B5B}
+/* Budget collapse/expand controls */
+.budget-controls{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.budget-ctrl-label{font-size:11px;color:#8A8070;letter-spacing:0.06em;text-transform:uppercase}
+.budget-ctrl-btn{padding:4px 10px;background:white;border:1px solid #DDD8CF;border-radius:3px;font-size:11px;color:#8A8070;cursor:pointer;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;transition:all 0.15s}
+.budget-ctrl-btn:hover{background:#F0EDE8;border-color:#A08B5B;color:#A08B5B}
+/* Budget table */
+.budget-table{background:white;border:1px solid #DDD8CF;border-radius:4px;overflow:hidden;box-shadow:0 1px 4px rgba(44,44,42,0.04)}
+.bt-table-header{display:grid;grid-template-columns:1fr 140px 140px;padding:9px 16px;background:#2C2C2A;font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#FAF8F5}
+.bt-table-header span:not(:first-child){text-align:right}
+.bt-cat-row{display:grid;grid-template-columns:1fr 140px 140px;padding:10px 16px;background:#F5F2EE;border-bottom:1px solid #EDE9E2;font-size:13px;font-weight:500;color:#2C2C2A;cursor:pointer;user-select:none;transition:background 0.1s}
+.bt-cat-row:hover{background:#EDE9E2}
+.bt-cat-label{display:flex;align-items:center;gap:6px}
+.bt-cat-chevron{font-size:10px;color:#8A8070;transition:transform 0.2s;flex-shrink:0}
+.bt-cat-row.collapsed .bt-cat-chevron{transform:rotate(-90deg)}
+.bt-cat-total{text-align:right;font-family:'DM Mono',monospace;font-size:13px}
+.bt-cat-total.client{color:#A08B5B}
+.bt-code-row{display:grid;grid-template-columns:1fr 140px 140px;padding:7px 16px 7px 30px;background:#FDFCFA;border-bottom:0.5px solid #F0EDE8;font-size:12px;color:#5A5A58;cursor:pointer;user-select:none;transition:background 0.1s}
+.bt-code-row:hover{background:#F5F2EE}
+.bt-code-label{display:flex;align-items:center;gap:5px}
+.bt-code-chevron{font-size:9px;color:#C0B8AC;transition:transform 0.2s}
+.bt-code-row.collapsed .bt-code-chevron{transform:rotate(-90deg)}
+.bt-code-total{text-align:right;font-family:'DM Mono',monospace;font-size:12px}
+.bt-code-total.client{color:#A08B5B}
+.bt-line-row{display:grid;grid-template-columns:1fr 140px 140px;padding:6px 16px 6px 48px;border-bottom:0.5px solid #F5F2EE;font-size:12px;color:#8A8070;background:white}
+.bt-line-cost{text-align:right;font-family:'DM Mono',monospace;font-size:12px;color:#8A8070}
+.bt-line-cost.client{color:#A08B5B}
+.budget-empty{text-align:center;padding:50px;color:#8A8070;font-size:13px;font-style:italic}
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;padding:11px 16px;border-radius:3px;font-size:13px;color:#FAF8F5;z-index:999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.success{background:#2C2C2A}
+.toast.error{background:#A84040}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="eyebrow">::New Project Name::</div>
+      <div class="header-title">Financial Admin</div>
+      <div class="header-sub">Map scope items to Buildertrend estimate lines · Finance only</div>
+    </div>
+    <div class="header-badge">Financial</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" data-tab="bt">BT Line Items</button>
+    <button class="tab-btn" data-tab="budget">Budget Preview</button>
+    <button class="tab-btn" data-tab="clientreport">Client Report</button>
+  </div>
+</div>
+
+<!-- ══ BT LINE ITEMS TAB ════════════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-bt">
+  <div class="bt-layout">
+
+    <!-- LEFT -->
+    <div>
+      <!-- Selected scope detail card -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-header">
+          <div>
+            <div class="card-title" id="selected-scope-title">Select a scope item →</div>
+            <div class="card-sub" id="selected-scope-meta">Click any item in the list on the right to begin</div>
+          </div>
+          <button class="new-bt-btn" id="new-bt-btn" disabled>＋ New BT Line</button>
+        </div>
+        <div id="selected-scope-detail" style="display:none">
+          <div class="sd-row">
+            <div class="sd-item" style="flex:1"><div class="sd-label">Room / Location</div><div class="sd-val" id="sd-room">—</div></div>
+            <div class="sd-item" style="flex:1"><div class="sd-label">Scope Area</div><div class="sd-val" id="sd-group">—</div></div>
+            <div class="sd-item"><div class="sd-label">Type</div><div class="sd-val" id="sd-type">—</div></div>
+          </div>
+          <div class="sd-row">
+            <div class="sd-item" style="flex:2"><div class="sd-label">Scope Name</div><div class="sd-val" id="sd-scope">—</div></div>
+            <div class="sd-item" style="flex:1"><div class="sd-label">Assigned To</div><div class="sd-val" id="sd-assigned">—</div></div>
+          </div>
+          <div class="sd-row" style="margin-bottom:0">
+            <div class="sd-item" style="flex:1"><div class="sd-label">Description</div><div class="sd-val" id="sd-desc" style="color:#8A8070;font-style:italic">—</div></div>
+          </div>
+          <div class="sd-row" style="margin-top:6px;margin-bottom:0;padding-top:6px;border-top:0.5px solid #EDE9E2">
+            <div class="sd-item"><div class="sd-label">Budget</div><div class="sd-val mono" id="sd-budget">—</div></div>
+            <div class="sd-item"><div class="sd-label">Actual</div><div class="sd-val mono" id="sd-actual">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BT Lines for selected item -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">BT Line Items</div>
+            <div class="card-sub" id="bt-items-sub">Select a scope item to see its BT lines</div>
+          </div>
+          <span style="font-size:12px;color:#8A8070;font-family:'DM Mono',monospace" id="bt-items-count"></span>
+        </div>
+        <div id="bt-items-list"><div class="bt-none-selected">No scope item selected</div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: scope list -->
+    <div class="scope-list-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">All Scope Items</div>
+            <div class="card-sub" id="scope-sub">Loading…</div>
+          </div>
+          <span class="list-count" id="scope-count"></span>
+        </div>
+        <div class="list-controls">
+          <input class="list-search" id="scope-search" type="text" placeholder="Search…">
+          <select class="list-filter" id="scope-room-filter"><option value="">All rooms</option></select>
+          <button class="unmapped-btn" id="unmapped-btn" title="Show only items with no BT lines">Unmapped only</button>
+        </div>
+        <div class="scope-list-body" id="scope-list"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ BUDGET PREVIEW TAB ════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-budget">
+  <div class="budget-header-bar">
+    <span class="markup-label">Markup %</span>
+    <div class="markup-wrap">
+      <input class="markup-input" id="markup-pct" type="number" min="0" max="999" step="0.1" value="0" placeholder="0">
+      <span class="markup-pct">%</span>
+    </div>
+    <span class="markup-note">Not stored · preview only</span>
+    <div class="budget-totals">
+      <div class="bt-total-item">
+        <div class="bt-total-label">Total Direct Cost</div>
+        <div class="bt-total-val" id="total-direct">—</div>
+      </div>
+      <div class="bt-total-item">
+        <div class="bt-total-label">Total Client Cost</div>
+        <div class="bt-total-val client" id="total-client">—</div>
+      </div>
+    </div>
+  </div>
+  <div class="budget-controls">
+    <span class="budget-ctrl-label">Categories:</span>
+    <button class="budget-ctrl-btn" id="expand-cats">Expand all</button>
+    <button class="budget-ctrl-btn" id="collapse-cats">Collapse all</button>
+    <span class="budget-ctrl-label" style="margin-left:12px">Cost Codes:</span>
+    <button class="budget-ctrl-btn" id="expand-codes">Expand all</button>
+    <button class="budget-ctrl-btn" id="collapse-codes">Collapse all</button>
+  </div>
+  <div class="budget-table">
+    <div class="bt-table-header">
+      <span>Cost Code / Line Item</span>
+      <span>Direct Cost</span>
+      <span>Client Cost</span>
+    </div>
+    <div id="budget-body"><div class="budget-empty">No BT line items yet. Add them in the BT Line Items tab.</div></div>
+  </div>
+</div>
+
+<!-- BT LINE ITEM MODAL -->
+<div class="modal-overlay" id="bt-modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">New BT Line Item</div>
+    <div class="modal-subtitle" id="modal-subtitle"></div>
+    <div class="form-row" style="margin-bottom:11px">
+      <div class="form-group" style="margin:0"><label class="form-label">Title</label><input class="form-input" id="m-title" type="text" placeholder="Line item title"></div>
+      <div class="form-group" style="margin:0"><label class="form-label">Description <span class="opt">(optional)</span></label><input class="form-input" id="m-desc" type="text" placeholder="Description"></div>
+    </div>
+    <div class="section-divider">Buildertrend Hierarchy</div>
+    <div class="form-row" style="margin-bottom:11px">
+      <div class="form-group" style="margin:0"><label class="form-label">Parent Group <span class="opt">(optional)</span></label><input class="form-input" id="m-pg" type="text" placeholder="e.g. Exterior Work"></div>
+      <div class="form-group" style="margin:0"><label class="form-label">Parent Group Desc <span class="opt">(optional)</span></label><input class="form-input" id="m-pgd" type="text" placeholder="Description"></div>
+    </div>
+    <div class="form-row" style="margin-bottom:11px">
+      <div class="form-group" style="margin:0"><label class="form-label">Subgroup <span class="opt">(optional)</span></label><input class="form-input" id="m-sg" type="text" placeholder="e.g. Framing"></div>
+      <div class="form-group" style="margin:0"><label class="form-label">Subgroup Desc <span class="opt">(optional)</span></label><input class="form-input" id="m-sgd" type="text" placeholder="Description"></div>
+    </div>
+    <div class="section-divider">Cost Code</div>
+    <div class="form-group">
+      <label class="form-label">Cost Code <span class="opt">(optional)</span></label>
+      <div class="cc-wrap">
+        <input class="cc-input" id="cc-search" type="text" placeholder="Search 677 cost codes…" autocomplete="off">
+        <div class="cc-dropdown" id="cc-dropdown"></div>
+      </div>
+      <input type="hidden" id="m-cost-code">
+    </div>
+    <div class="section-divider">Pricing</div>
+    <div class="form-row-3" style="margin-bottom:11px">
+      <div class="form-group" style="margin:0"><label class="form-label">Quantity <span class="opt">(opt)</span></label><input class="form-input" id="m-qty" type="number" min="0" step="any" placeholder="0"></div>
+      <div class="form-group" style="margin:0"><label class="form-label">Unit <span class="opt">(opt)</span></label><input class="form-input" id="m-unit" type="text" placeholder="ea, lf, sf…"></div>
+      <div class="form-group" style="margin:0"><label class="form-label">Unit Cost <span class="opt">(opt)</span></label><div class="cost-wrap"><span class="currency">$</span><input class="form-input" id="m-unit-cost" type="number" min="0" step="0.01" placeholder="0"></div></div>
+    </div>
+    <div class="form-row" style="margin-bottom:11px">
+      <div class="form-group" style="margin:0"><label class="form-label">Total Cost</label><div class="cost-wrap"><span class="currency">$</span><input class="form-input" id="m-total" type="number" min="0" step="0.01" placeholder="Auto from qty × unit cost"></div></div>
+      <div class="form-group" style="margin:0"><label class="form-label">Cost Type <span class="opt">(opt)</span></label><select class="form-select" id="m-cost-type"><option value="">— Select —</option><option value="Labor">Labor</option><option value="Material">Material</option><option value="Equipment">Equipment</option><option value="Subcontractor">Subcontractor</option><option value="Other">Other</option></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">Internal Notes <span class="opt">(optional)</span></label><input class="form-input" id="m-notes" type="text" placeholder="Notes visible internally in Buildertrend"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modal-cancel">Cancel</button>
+      <button class="btn-save" id="modal-save">Save BT Line</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- CLIENT REPORT TAB -->
+<div class="tab-content" id="tab-clientreport">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+
+    <!-- LEFT: Project Details + Settings -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Project Details</div></div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div class="form-group"><label class="form-label">Client Name</label><input class="form-input" id="cr-client" type="text" placeholder="e.g. The Thesing Family"></div>
+          <div class="form-group"><label class="form-label">Project Address</label><input class="form-input" id="cr-address" type="text" placeholder="e.g. 123 Main St, San Francisco CA"></div>
+          <div class="form-group"><label class="form-label">Proposal Date</label><input class="form-input" id="cr-date" type="date"></div>
+          <div class="form-group"><label class="form-label">Prepared By</label><input class="form-input" id="cr-preparedby" type="text" placeholder="e.g. Jen Roper"></div>
+          <div class="form-group"><label class="form-label">Project Narrative <span style="color:#C0B8AC;font-weight:300">(one paragraph)</span></label><textarea class="form-textarea" id="cr-narrative" style="min-height:90px" placeholder="Describe the project scope in plain language for the client…"></textarea></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">Pricing</div></div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div class="form-group">
+            <label class="form-label">Markup %</label>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="position:relative;width:100px">
+                <input class="form-input" id="cr-markup" type="number" min="0" max="999" step="0.1" placeholder="0" style="padding-right:24px;text-align:right">
+                <span style="position:absolute;right:9px;top:50%;transform:translateY(-50%);color:#8A8070;font-size:12px;pointer-events:none">%</span>
+              </div>
+              <span style="font-size:12px;color:#C0B8AC;font-style:italic">Applied to all client-facing prices</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contingency</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="type-toggle" style="width:180px">
+                <button class="type-opt active-est" id="cr-cont-pct-btn" onclick="setCrContType('pct')">Percentage (%)</button>
+                <button class="type-opt" id="cr-cont-flat-btn" onclick="setCrContType('flat')">Flat ($)</button>
+              </div>
+              <input type="hidden" id="cr-cont-type" value="pct">
+              <div style="position:relative;width:110px">
+                <span id="cr-cont-symbol" style="position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#8A8070;font-size:12px;pointer-events:none">%</span>
+                <input class="form-input" id="cr-cont-value" type="number" min="0" step="0.1" placeholder="0" style="padding-left:22px">
+              </div>
+              <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#8A8070;cursor:pointer">
+                <input type="checkbox" id="cr-show-cont" checked style="width:14px;height:14px"> Show on client page
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Spotlights + Alternates Form + Display -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Scope Spotlights</div><span style="font-size:12px;color:#8A8070">Up to 4</span></div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:14px">
+          <div id="spotlight-list"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Alternates Form</div><div style="font-size:12px;color:#8A8070;margin-top:2px">Auto-generates a Google Form for client alternate selections</div></div>
+        </div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+          <div id="cr-form-status" style="font-size:12px;color:#C0B8AC;font-style:italic">No form generated yet.</div>
+          <div id="cr-form-url-wrap" style="display:none">
+            <label class="form-label">Form URL</label>
+            <input class="form-input" id="cr-form-url" type="text" readonly style="background:#F5F2EE;color:#8A8070;font-size:12px">
+          </div>
+          <button type="button" class="btn-primary" id="cr-gen-form-btn" style="width:auto;align-self:flex-start">Generate Alternates Form</button>
+          <div style="font-size:11px;color:#C0B8AC;line-height:1.5">This creates a Google Form with all Alternate scope items. Clients receive a link on the client pages. Submissions email jen@trinitybuildingco.com automatically.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">Display Options</div></div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#2C2C2A;cursor:pointer">
+            <input type="checkbox" id="cr-show-ni" checked style="width:14px;height:14px"> Show "Not Included" section
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#2C2C2A;cursor:pointer">
+            <input type="checkbox" id="cr-show-alts" checked style="width:14px;height:14px"> Show Alternates section
+          </label>
+        </div>
+      </div>
+
+      <button type="button" class="btn-primary" id="cr-save-btn">Save Client Report Settings</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxYdeDPuexKgvezjLYmSTRJOZ-Zf3NYHwa0huXsNPPR3aXqeNF4N8i8deGzfnJT8Wx-gg/exec';
+
+
+const COST_CODES={"01 General Conditions": ["01001-M Auto, Fuel, Tolls, Parking Fees", "01004-L Cellular Data/Wireless Hot Spot to support cameras", "01004-M Cellular Data/Wireless Hot Spot to support cameras", "01005-M Project Specific Computer/Software", "01006-M Dewatering", "01007-L Detailed Project Phase Photography Documentation", "01007-M Detailed Project Phase Photography Documentation", "01008-S Dump Fees", "01009-L First Aid", "01009-M First Aid", "01010-M In-house Office Supplies", "01012-S Materials Testing", "01013-L Messenger Service/Fed Ex/UPS", "01013-M Messenger Service/FedEx/UPS", "01014-M Off Site Storage", "01015-S Professional Staged Photo Documentation", "01017-L Printing/Reproducibles", "01017-M Printing/Reproducibles", "01017-S Printing/Reproducibles", "01018-L Rental: Tool", "01018-M Rental: Tool", "01019-L Rental: Truck ", "01019-M Rental: Truck", "01020-L Samples & Mockups Sourcing, Production & Coordination", "01020-M Samples & Mockups Sourcing, Production & Coordination", "01021-S Site Control & Survey", "01024-L Site office Setup/Takedown/Supply", "01024-M Site office Setup/Takedown/Supply", "01025-L Tool/Equipment Purchase - Project Specific", "01025-M Tool/Equipment Purchase - Project Specific", "01026-L Tool Repair", "01026-M Tool Repair", "01027-M Travel /Lodging/Per Diem", "01029-M TBC Housing Stipend", "01031-M Building Materials - Miscellaneous", "01501-L Development & Updating Schedules", "01502-L Identification of Material Sourcing/Service Lead Times", "01503-L Project Phasing Coordination", "01504-L Value Engineering Research and Recommendation", "01505-L Project Specification and SOW Development", "01506-L Consultant Coordination/Management", "01507-L Subcontractor/Vendor Negotiations", "01508-L Subcontractor Coordination & Facilitation", "01509-L Project Meeting Minute Documentation/Tracking", "01510-L Drawing/Plans/Specs Logging, Distribution", "01511-L RFI Drafting, Coordination & Logging", "01513-L Payment Application Documentation", "01514-L Project Budget Management and Updating", "01515-L Subcontractor Lien Waiver Tracking", "01516-L Subcontractor Insurance requirements tracking", "01517-L Project Operation & Maintenance Manual Documentation", "01518-L Subcontractor and Vendor Warranty/Close-out Logging", "01519-L Trinity Site Layout,On Site Supervision, Schedule Mgmnt.", "01520-L Trinity Management Off Site (Trinity Office Project Management)", "01521-L Construction Feasibility Evaluations", "01522-L Permit Inspection Scheduling & Tracking", "01523-L Site Meeting Coordination & Facilitation", "01605-L Site Inspections/Testing/Special Inspections", "01900-L Permit Support & Tracking", "01901-M Permit Support & Tracking", "Retention Due", "Uncategorized"], "02 Site Development, Upkeep and Logistics": ["02006-L Course of Construction and Post Construction Cleaning", "02006-M Course of Construction & Post Construction Cleaning", "02006-S Course of Construction & Post Construction Cleaning", "02008-S Concrete Cutting/Coring", "02009-L Building Materials - Misc. (not related to specific construction di", "02009-M Building Materials - Misc. (not related to specific construction di", "02010-L Debris Boxes/ Continued Hauling ", "02010-S Debris Boxes/ Continued Hauling", "02015-L Fire Protection Safety", "02015-M Fire Protection Safety", "02027-L Interior Site Protection - Labor & Materials", "02027-M Interior Site Protection - Labor & Materials", "02028-L Exterior Site Protection", "02028-M Exterior Site Protection", "02029-S Rental: Construction Fencing", "02033-L Rental:  Toilet & Painting Upkeep of shroud", "02033-M Rental:  Toilet  & Painting Upkeep of shroud", "02034-L Security Set-up and Maintenance - Full Course of construction", "02034-M Security Set-up & Maintenance - Full Course of construction", "02035-S Temporary Power Pole", "02037-L Rental: Temp Scaffolding ", "02037-S Rental: Temp Scaffolding", "02051-L Weatherproofing - Throughout Construction Cycle", "02051-M Weatherproofing - Throughout Construction Cycle", "02052-L Preconstruction Mobilization & Post Construction Demobilization ", "02052-M Preconstruction Mobilization & Post Construction Demobilization", "02053-L Preconstruction Miscellaneous Repairs", "02053-M Preconstruction Miscellaneous Repairs", "02054-L Pre Demo Testing for Asbestos and Lead", "02054-S Pre Demo Testing for Asbestos and Lead", "02100-L Site Remediation (Asbestos Abatement - Lead Paint Abatement)", "02100-S Site Remediation (Asbestos Abatement - Lead Paint Abatement)", "02150-L Packing Moving and Storage of all furniture, clothing etc.", "02150-S  Packing Moving & storage of all furniture, clothing etc.", "02200-L Interior Demolition & Off Haul ", "02200-M Interior Demolition & Off Haul ", "02200-S Interior Demolition & Off Haul ", "02201-L Temporary House Shoring & Underpinning", "02201-S Temporary House Shoring & Underpinning", "02210-L Incidental Shoring of Framing in Prep for new beams and framing", "02210-S Incidental Shoring of Framing in Prep for new beams & framing", "02215-L Existing Chimney Shoring & Protection", "02215-M Existing Chimney Shoring and Protection", "02215-S Existing Chimney Shoring and Protection", "02220-L Demo and off haul of existing Foundation", "02220-M Demo & off haul of existing Foundation", "02220-S Demo & off haul of existing Foundation", "02221-L Exterior Patio Foundation + SOG - Demo and Excavation ", "02221-M Exterior Patio Foundation + SOG - Demo and Excavation", "02221-S Exterior Patio Foundation + SOG - Demo and Excavation", "02225-L Interior Light Demo ", "02225-M Interior Light Demo", "02225-S Interior Light Demo", "02226-L Exterior Light Demo: Siding and Trim removal as required", "02226-M Exterior Light Demo: Siding and Trim removal as required", "02300-L Earthwork (Excavation of dirt and off haul as required ", "02300-M Earthwork (Excavation of dirt and off haul)", "02300-S Earthwork (Excavation of dirt and off haul)", "02310-L Excavation of dirt and off haul as required for new Utility Trenches ", "02310-M Excavation of dirt and off haul as required for new Utility Trenches", "02310-S Excavation of dirt and off haul as required for new Utility Trenches\\", "02320-L Demo and remove existing Hardscape/Pavers in backyard", "02321-L Demo of Vegetation & Plant Relocation", "02321-S Demo of Vegetation and Plant Relocation", "02400-L Soil and Sand Shoring as required for new concrete scope", "02400-S Soil and Sand Shoring as required for new concrete scope", "02450-L Demo Foundation & Load-bearing Elements", "02450-M Demo Foundation & Load-bearing Elements", "02450-S Demo Foundation & Load-bearing Elements", "02500-L Utility Services: Site Utilities & Fixtures safe off ", "02500-M Utility Services: Site Utilities & Fixtures safe off", "02500-S Utility Services: Site Utilities & Fixtures safe off", "02510-L Exterior Demolition and Off Haul", "02510-S Exterior Demolition and Off Haul", "02600-L Drainage & Containment", "02600-M Drainage & Containment", "02600-S Drainage & Containment", "02800-L Landscaping: Site Improvements & Amenities", "02800-S Landscaping: Site Improvements & Amenities", "02900-L Landscaping: Planting", "02900-S Landscaping: Planting", "02950-L Site Restoration & Rehabilitation", "02950-M Site Restoration & Rehabilitation", "02950-S Site Restoration & Rehabilitation"], "03 Concrete": ["03050-L Basic Materials & Methods", "03050-M Basic Materials & Methods", "03050-S Basic Materials & Methods", "03150-L Concrete Accessories", "03150-S Concrete Accessories", "03151-L Concrete Anchoring", "03151-S Concrete Anchoring", "03153-L Concrete Shear Stud Anchors & Connectors", "03153-S Concrete Shear Stud Anchors and Connectors", "03200-L Concrete Reinforcement", "03200-S Concrete Reinforcement", "03240-L Fibrous Reinforcing", "03240-S Fibrous Reinforcing", "03250-L Post Tensioning", "03250-S Post Tensioning", "03300-L Cast-in-Place Concrete", "03300-S Cast-in-Place Concrete", "03310-L New Concrete Slab: House foundation waterproofing & drainage", "03310-M New Concrete Slab: House foundation waterproofing and drainage", "03310-S New Concrete Slab: House foundation waterproofing and drainage", "03320-L Install New Concrete Stairs & retaining walls", "03320-M Install New Concrete Stairs and retaining walls", "03320-S Install New Concrete Stairs and retaining walls", "03321-L Sidewalk Concrete Work ", "03321-M Sidewalk Concrete Work", "03321-S Sidewalk Concrete Work", "03322-L Concrete Garbage Pad", "03322-M  Concrete Garbage Pad", "03322-S Concrete Garbage Pad", "03323-L Concrete HVAC Equipment Pad", "03323-M Concrete HVAC Equipment Pad", "03323-S Concrete HVAC Equipment Pad", "03330-L New Concrete Footings ", "03330-M New Concrete Footings", "03330-S New Concrete Footings", "03340-L Replace Garage Slab", "03340-M Replace Garage Slab", "03370-L Concrete Specialty", "03370-M Concrete Specialty", "03370-S Concrete Specialty", "03400-L Precast Concrete", "03400-M Precast Concrete", "03400-S Precast Concrete", "03701-L Site Concrete (Per Gridlines)", "03701-M Site Concrete (Per Gridlines)", "03701-S Site Concrete (Per Gridlines)", "03900-L Concrete Restoration & Cleaning", "03900-M Concrete Restoration & Cleaning", "03900-S Concrete Restoration & Cleaning", "03930-L Concrete Rehabilitation (repair concrete retaining walls)", "03930-M Concrete Rehabilitation (repair concrete retaining walls)", "03930-S Concrete Rehabilitation (repair concrete retaining walls)"], "04 Masonry": ["04060-L Masonry Mortar/ Tuckpointing", "04060-M Masonry Mortar / Tuckpointing", "04060-S Masonry Mortar / Tuckpointing", "04081-L Masonry Anchorage/ Accessories", "04081-M Masonry Anchorage/ Accessories", "04081-S Masonry Anchorage/ Accessories", "04220-L Concrete Masonry Units", "04220-M Concrete Masonry Units", "04220-S Concrete Masonry Units", "04400-L Exterior Stone paving", "04400-M Exterior Stone paving", "04400-S Exterior Stone paving", "04410-L Exterior Stone Cladding on House Structure  - supply & install", "04410-M Exterior Stone Cladding on House Structure - supply & install", "04410-S Exterior Stone Cladding on House Structure - supply & install", "04411-L Exterior Stucco - New Integral Color Stucco", "04411-M Exterior Stucco - New Integral Color Stucco", "04411-S Exterior Stucco - New Integral Color Stucco", "04412-L Brick/ Masonry Cladding", "04412-M Brick/ Masonry Cladding", "04412-S Brick/ Masonry Cladding", "04700-L Simulated Masonry/ Stone - supply & install", "04700-M Simulated Masonry/ Stone - supply & install", "04700-S Simulated Masonry/ Stone - supply & install", "04850-L Interior Stone Countertops & Cladding - supply & install & sealing", "04850-M Interior Stone Countertops + Cladding - supply & install & sealing", "04850-S Interior Stone Countertops + Cladding - supply & install & sealing", "04880-L New Fireplace Hearth & Surround", "04880-M New Fireplace Hearth & Surround", "04880-S New Fireplace Hearth & Surround", "04900-L Masonry Restoration & Cleaning", "04900-S Masonry Restoration & Cleaning", "04950-L Exterior Stone Planters", "04950-M Exterior Stone Planters", "04950-S Exterior Stone Planters"], "05 Metals": ["05080-L Factory-applied Metal Coatings", "05080-S Factory-applied Metal Coatings", "05100-L Structural Metal Framing", "05100-M Structural Metal Framing", "05100-S Structural Metal Framing", "05120-L Structural Steel Supply, Fabrication & Install per Structural Plans", "05120-M Structural Steel Supply, Fabrication and Install per Structural Plans", "05120-S Structural Steel Supply, Fabrication and Install per Structural Plans", "05160-L Metal Framing Systems - Light Gauge Steel Framing ", "05160-M Metal Framing Systems - Light Gauge Steel Framing", "5160-S Metal Framing Systems - Light Gauge Steel Framing", "5300-L Metal Deck", "5300-M Metal Deck", "5300-S Metal Deck", "5310-L Steel Deck", "5500-L Metal Fabrications", "5500-M Metal Fabrications", "5500-S Metal Fabrications", "5520-L Metal Handrails & Railing - Interior", "5520-M Metal Handrails & Railing - Interior", "5520-S Metal Handrails & Railing - Interior", "5523-L Handrails & Railing - Exterior", "5523-M Handrails & Railing - Exterior", "5523-S Handrails & Railing - Exterior", "5600-L Ornamental Metal", "5600-S Ornamental Metal", "5700-L Custom Powder Coated metal stairs", "5700-S Custom Powder Coated metal stairs", "5800-L Metal Restoration & Cleaning", "5800-S Metal Restoration & Cleaning"], "06 Wood & Plastics": ["6001-L Fabrication of Wood Panels", "6001-S Fabrication of Wood Panels", "6050-L Basic Materials & Methods", "6050-M Basic Materials & Methods", "6050-S Basic Materials & Methods", "6070-L Wood Treatment", "6070-M Wood Treatment", "6070-S Wood Treatment", "6080-L Factory-Applied Wood Coatings", "6080-M Factory-Applied Wood Coatings", "6080-S Factory-Applied Wood Coatings", "6100-L Rough Carpentry (Wood Framing Supply & Install)", "6100-M Rough Carpentry (Wood Framing Supply and Install)", "6100-S Rough Carpentry (Wood Framing Supply and Install)", "6110-L Rough Carpentry (check & correct for Straight Edge framing in preparation", "6110-M Rough Carpentry (check and correct for Straight Edge framing)", "6110-S Rough Carpentry (check and correct for Straight Edge framing)", "6120-L Rough Carpentry - Miscellaneous Blocking", "6120-M Rough Carpentry - Miscellaneous Blocking", "6120-S Rough Carpentry - Miscellaneous Blocking", "6130-L Heavy Timber Construction", "6130-M Heavy Timber Construction", "6130-S Heavy Timber Construction", "6160-L Sheating", "6160-M Sheating", "6160-S Sheating", "6170-L Prefabricated Structural Wood", "6170-M Prefabricated Structural Wood", "6170-S Prefabricated Structural Wood", "6200-L Finish Carpentry - Interior Trim", "6200-M Finish Carpentry - Interior Trim", "6200-S Finish Carpentry - Interior Trim", "6210-L Finish Carpentry - Misc. Int. Millwork, Closet Build-outs", "6210-M Finish Carpentry - Misc. Int. Millwork, Closet Build-outs", "6210-S Finish Carpentry - Misc. Int. Millwork, Closet Build-outs", "6220-L Finish Exterior  Carpentry - Exterior Trim Wood Cladding/ Siding", "6220-M Finish Exterior  Carpentry - Exterior Trim Wood Cladding/ Siding", "6220-S Finish Exterior  Carpentry - Exterior Trim Wood Cladding/ Siding", "6230-L Finish Carpentry - Exterior", "6230-M Finish Carpentry - Exterior", "6230-S Finish Carpentry - Exterior", "6240-L Finish Carpentry Interior Stair Hand Railings + Brackets", "6240-M Finish Carpentry Interior Stair Hand Railings + Brackets", "6240-S Finish Carpentry Interior Stair Hand Railings + Brackets", "6250-L Finish Carpentry Exterior - Stair Trim + Handrail", "6250-M Finish Carpentry Exterior - Stair Trim + Handrail", "6400-L Architectural Woodwork (Moldings, Staircase Newels, Balusters, Skirt)", "6400-M Architectural Woodwork (Moldings, Staircase Newels, Balusters, Skirt)", "6400-S Architectural Woodwork (Moldings, Staircase Newels, Balusters, Skirt)", "6410-L Cabinetry and Casework Shop Drawings, Supply & Install", "6410-M Cabinetry and Casework Shop Drawings, Supply & Install", "6410-S Cabinetry and Casework Shop Drawings, Supply & Install", "6420-L Cabinetry Pulls - Specs TBD", "6420-M Cabinetry Pulls - Specs TBD", "6430-L Cabinet Sub-tops - CDX plywood mill supply and installation", "6430-M Cabinet Sub-tops - CDX plywood mill supply & installation", "6900-L Wood & Plastic Restoration & Cleaning", "6900-M Wood & Plastic Restoration & Cleaning"], "07 Thermal & Moisture Protection": ["7100-L Dampproofing & Waterproofing & Foundation Walls", "7100-M Dampproofing & Waterproofing & Foundation Walls", "7100-S Dampproofing & Waterproofing & Foundation Walls", "7110-L Shingles, Roof Tiles, & Roof Coverings", "7110-M Shingles, Roof Tiles, & Roof Coverings", "7110-S Shingles, Roof Tiles, & Roof Coverings", "7120-L Sidewall Waterproofing in prep for siding and trim", "7120-M Sidewall Waterproofing in prep for siding and trim", "7130-L Sheet Waterproofing Window and Door Pans & Misc.", "7130-M Sheet Waterproofing Window and Door Pans & Misc", "7130-S Sheet Waterproofing Window and Door Pans & Misc", "7131-L Flexible Bituminous Flashing + Sealant at all new Windows and Doors", "7131-M Flexible Bituminous Flashing + Sealant at all new Windows & Doors", "7131-S Flexible Bituminous Flashing + Sealant at all new Windows & Doors", "7140-L Fluid Applied Waterproofing", "7140-M Fluid Applied Waterproofing", "7140-S Fluid Applied Waterproofing", "7160-L Low Slope Roof Membranes", "7160-M Low Slope Roof Membranes", "7160-S Low Slope Roof Membranes", "7180-L Traffic Coatings (Epoxy)", "7180-M Traffic Coatings (Epoxy)", "7180-S Traffic Coatings (Epoxy)", "7200-L Thermal Protection", "7200-M Thermal Protection", "7200-S Thermal Protection", "7210-L Building Insulation Condensation Control: Low Density Foam", "7210-M Building Insulation Condensation Control: Low Density Foam", "7210-S Building Insulation Condensation Control: Low Density Foam", "7212-L Floor Slab on Grade: XPS Rigid Board", "7212-M Floor Slab on Grade: XPS Rigid Board", "7212-S Floor Slab on Grade: XPS Rigid Board", "7213-L Floor Exterior - Insulation and Condensation Control", "7213-M Floor Exterior - Insulation and Condensation Control", "7213-S Floor Exterior - Insulation and Condensation Control", "7214-L Walls Exterior Envelope - Insulation", "7214-M Walls Exterior Envelope - Insulation", "7214-S Walls Exterior Envelope - Insulation", "7215-L Thermal & Acoustical Insulation", "7215-M Thermal & Acoustical Insulation", "7215-S Thermal & Acoustical Insulation", "7216-L Walls & Floor Interior (Sound Dampening)", "7216-M Walls and Floor Interior (Sound Dampening)", "7216-S Walls and Floor Interior (Sound Dampening)", "7217-L Floors Interior - Foil Barrier+Open Cell Foam ", "7217-M Floors Interior - Foil Barrier + Open Cell Fams", "7217-S Floors Interior - Foil Barrier + Open Cell Fam", "7220-L Roof & Deck Insulation", "7220-M Roof and Deck Insulation", "7220-S Roof and Deck Insulation", "7240-L Exterior Insulation & Finish Systems", "7240-M Exterior Insulation and Finish Systems", "7240-S Exterior Insulation and Finish Systems", "7410-L Metal Roof & Wall Panels", "7410-M Metal Roof and Wall Panels", "7410-S Metal Roof and Wall Panels", "7460-L Siding (Sidewall Waterproofing)", "7460-M Siding (Sidewall Waterproofing)", "7500-L Membrane Roofing", "7500-M Membrane Roofing", "7500-S Membrane Roofing", "7700-L Roof Specialties & Accessories (Roof Shroud/Metal Flashings & Caps)", "7700-M Roof Specialties & Accessories (Roof Shroud/Metal Flashings & Caps)", "7700-S Roof Specialties & Accessories (Roof Shroud/Metal Flashings & Caps)", "7800-L Fire & Smoke Protection (Spark Arrestor))", "7800-S Fire & Smoke Protection (Spark Arrestor)", "7810-L Applied Fireproofing (Fire caulking)", "7810-M Applied Fireproofing (Fire caulking)", "7810-S Applied Fireproofing (Fire caulking)", "7900-L Joint Sealers", "7900-M Joint Sealers", "7900-S Joint Sealers"], "08 Doors, Windows & Glazing": ["8050-L Windows  - supply & install", "8050-M Windows  - supply & install", "8050-S Windows  - supply & install", "8051-L Windows - Fire rated", "8051-M Windows - Fire rated", "8051-S Windows - Fire rated", "8100-L Exterior Doors - supply & install per plans & assumed dimensions", "8100-M Exterior Doors - supply & install per plans & assumed dimensions", "8100-S Exterior Doors - supply & install per plans & assumed dimensions", "8110-L Metal Doors & Frames (Garage 2 hour rated)", "8110-M Metal Doors & Frames (Garage 2 hour rated)", "8110-S Metal Doors & Frames (Garage 2 hour rated)", "8210-L Interior Doors - Supply & Install", "8210-M Interior Doors - Supply & Install", "8300-M Specialty Doors (Access Doors for crawlspace, Shroud)", "8360-L Overhead Doors", "8360-M Overhead Doors", "8360-S Overhead Doors", "8600-L Skylights", "8600-M Skylights", "8600-S Skylights", "8700-L Interior & Exterior Door Hardware and Install ", "8700-M Interior & Exterior Door Hardware and Install", "8800-L Glass and Glazing - Mirror supply & installation ", "8800-M Glass and Glazing - Mirror supply & installation", "8800-S Glass and Glazing - Mirror supply & installation", "8810-L Shower Door & Enclosure Glass - Tempered & Frameless", "8810-S Shower Door & Enclosure Glass - Tempered & Frameless", "8815-L Custom Glazing & Decorative Glass", "8815-S Custom Glazing & Decorative Glass"], "09 Finishes": ["9060-L Exterior Densglass- supply & install", "9060-M Exterior Densglass- supply & install", "9060-S Exterior Densglass- supply & install", "9130-L Ceiling Acoustical Suspension & Treatment", "9130-M Ceiling Acoustical Suspension & Treatment", "9130-S Ceiling Acoustical Suspension & Treatment", "9200-L New Gypsum Wallboard & Taping & Mudding", "9200-S New Gypsum Wallboard & Taping & Mudding:", "9210-L Miscellaneous Drywall Patching required during finish phases", "9210-M Miscellaneous Drywall Patching required during finish phases", "9210-S Miscellaneous Drywall Patching required during finish phases", "9220-L Plaster Finishes (Supply, Install & Samples)", "9220-S Plaster Finishes (Supply, Install & Samples)", "9270-L Gypsum Board Accessories ", "9270-M Gypsum Board Accessories", "9270-S Gypsum Board Accessories", "9300-L Tile - supply & install", "9300-M Tile - supply & install", "9300-S Tile - supply & install", "9500-L Ceilings (Tin)", "9500-M Ceilings (Tin)", "9500-S Ceilings (Tin)", "9600-L Flooring - Carpet - supply & install", "9600-M Flooring - Carpet - supply & install", "9600-S Flooring - Carpet - supply & install", "9610-L Flooring - Wood Flooring - supply & install", "9610-M Flooring - Wood Flooring - supply & install", "9610-S Flooring - Wood Flooring - supply & install", "9620-L Refinish Existing Hardwood Floor", "9620-S Refinish Existing Hardwood Floor", "9630-L Wood stair treads + risers - supply & install", "9630-S Wood stair treads + risers - supply & install", "9640-L Cork Underlayment", "9640-S Cork Underlayment", "9650-L Flooring - Self-Leveling Compound and sealer in preparatin", "9650-M Flooring - Self-Leveling Compound & sealer in preparation", "9650-S Flooring - Self-Leveling Compound & sealer in preparation", "9700-L Wall Finishes", "9700-S Wall Finishes", "9770-L Special Wall Surfaces", "9770-S Special Wall Surfaces", "9800-L Wall Acoustical Treatment", "9800-M Wall Acoustical Treatment", "9800-S Wall Acoustical Treatment", "9900-L Paints & Coatings - Interior", "9900-S Paints & Coatings - Interior", "9901-L Staining & Sealing - Interior ", "9901-M Staining & Sealing - Interior", "9901-S Staining & Sealing - Interior", "9910-L Paints & Coatings - Exterior ", "9910-M Paints & Coatings - Exterior", "9910-S Paints & Coatings - Exterior", "9920-L Staining/Sealing - Exterior", "9920-M Staining/Sealing - Exterior", "9920-S Staining/Sealing - Exterior", "9960-L High-Performance Coatings", "9960-S High-Performance Coatings"], "10 Specialties": ["10200-L Louvers & Vents", "10200-S Louvers & Vents", "10240-L Grilles & Screens", "10240-S Grilles & Screens", "10260-L Walls & Corner Guards", "10260-M Walls & Corner Guards", "10260-S Walls & Corner Guards", "10290-L Pest Control", "10290-S Pest Control", "10300-L Fireplaces & Stoves (Including Flue components)", "10300-M Fireplaces & Stoves (Including Flue components)", "10300-S Fireplaces & Stoves (Including Flue components)", "10305-L Manufactured Fireplaces", "10305-M Manufactured Fireplaces", "10305-S Manufactured Fireplaces", "10310-L Custom Fireplace Design", "10310-M Custom Fireplace Design", "10310-S Custom Fireplace Design", "10311 Outdoor Water Feature", "10340-L Manufactured Exterior Specialties (Arbors, Shade Control)", "10340-M Manufactured Exterior Specialties (Arbors, Shade Control)", "10340-S Manufactured Exterior Specialties (Arbors, Shade Control)", "10342-L Below-grade Egress Assemblies", "10342-M Below-grade Egress Assemblies", "10342-S Below-grade Egress Assemblies", "10345 - L Laundry Chute", "10345 - M Laundry Chute ", "10345 - S Laundry Chute", "10710-L Exterior Shutters & Screen Systems (Wind, Sun)", "10710-M Exterior Shutters & Screen Systems (Wind, Sun)", "10710-S Exterior Shutters & Screen Systems (Wind, Sun)", "10800-L Toilet & Bathroom & Laundry Accessories", "10800-M Toilet & Bathroom & Laundry Accessories"], "11 Equipment": ["1003: Misc Construction Hardware", "11010-L Maintenance Equipment (Septic Systems, Water-pumps)", "11010-M Maintenance Equipment (Septic Systems, Water pumps)", "11010-S  Maintenance Equipment (Septic Systems, Water pumps)", "11020-L Security System", "11020-M Security System", "11020-S Security System", "11130-L Audio-Visual Equipment", "11130-M Audio-Visual Equipment", "11130-S Audio-Visual Equipment", "11450-L Residential Equipment Supply & Delivery (All Appliances to be delivered ", "11450-M Residential Equipment Supply & Delivery (All Appliances to be delivered ", "11450-S Residential Equipment Supply & Delivery (All Appliances to be delivered", "11455-L Residential Equipment - Installation of custom panels by Vendor "], "12 Furnishings": ["12050-L Fabrics", "12050-M Fabrics", "12050-S Fabrics", "12051-L Custom Bench Cushions", "12051-M Custom Bench Cushions", "12051-S Custom Bench Cushions", "12100-L Art", "12100-M Art", "12100-S Art", "12300-L Manufactured Casework", "12300-M Manufactured Casework", "12300-S Manufactured Casework", "12400-L Furnishings and Accessories", "12400-M Furnishings and Accessories", "12400-S Furnishings and Accessories", "12490-L Window Treatments: Standard and Motorized Shades", "12490-S Window Treatments: Standard and Motorized Shades", "12500-M Furniture"], "13 Special Construction": ["13130-L Pre-Fabricated Special Construction ", "13130-M Pre-Fabricated Special Construction", "13130-S Pre-Fabricated Special Construction", "13150-L Swimming Pools", "13150-M Swimming Pools", "13150-S Swimming Pools", "13170-L Tubs & Pools", "13170-M Tubs & Pools", "13170-S Tubs & Pools", "13600-L Solar & Wind Energy Equipment", "13600-M Solar & Wind Energy Equipment", "13600-S Solar & Wind Energy Equipment", "13650-L Photovoltaic Collectors", "13650-M Photovoltaic Collectors", "13650-S Photovoltaic Collectors", "13700-L Security Access & Surveillance", "13700-M Security Access & Surveillance", "13700-S Security Access & Surveillance", "13800-L Building Automation & Control", "13800-M Building Automation & Control", "13800-S Building Automation & Control", "13850-L Detection & Alarm (Fire alarm monitoring)", "13850-M Detection & Alarm (Fire alarm monitoring)", "13850-S Detection & Alarm (Fire alarm monitoring)", "13900-L Fire Suppression ", "13900-M Fire Suppression", "13900-S Fire Suppression"], "14 Conveying Systems": ["14100-L Dumbwaiters", "14100-M Dumbwaiters", "14100-S Dumbwaiters", "14200-L Elevators", "14200-M Elevators", "14200-S Elevators", "14290-L Elevator Interior Fit Out", "14290-M Elevator Interior Fit Out", "14290-S Elevator Interior Fit Out", "14500-L Material Handling", "14500-M Material Handling", "14500-S Material Handling", "14800-L Fire Escape - supply & install (modifications of existing)", "14800-M Fire Escape - supply & install (Modifications of existing)", "14800-S Fire Escape - supply & install (Modifications of existing)"], "15 Mechanical & Plumbing": ["15400-L Plumbing - Rough Plumbing and Final Trim out of Fixtures & Equipment", "15400-M Plumbing - Rough Plumbing & Final Trim out of Fixtures & Equipment", "15400-S Plumbing - Rough Plumbing & Final Trim out of Fixtures & Equipment", "15401-L Sewer Modifications and Under Slab Rough:", "15401-M Sewer Modifications and Under Slab Rough", "15401-S Sewer Modifications and Under Slab Rough", "15402-L Gas line modifications", "15402-M Gas line modifications", "15402-S Gas line modifications", "15403-L New Gas line - supply & install", "15403-S New Gas line - supply & install", "15404-L New Water Heater - supply & install", "15404-S New Water Heater - supply & install", "15410-L Plumbing Fixtures", "15410-M Plumbing Fixtures", "15420-L New Exterior Storm Water - Roof Drains", "15420-S New Exterior Storm Water - Roof Drains", "15421-L Modify gutter downspouts rain leaders", "15421-M Modify gutter downspouts rain leaders", "15421-S Modify gutter downspouts rain leaders", "15430-L Exterior Sewer Lateral - outside of building", "15430-M Exterior Sewer Lateral - outside of building", "15430-S Exterior Sewer Lateral - outside of building", "15440-L Water Main Upgrade", "15440-M Water Main Upgrade", "15440-S Water Main Upgrade", "15450-L Steam Shower Unit - supply & install", "15450-M Steam Shower Unit - supply & install", "15450-S Steam Shower Unit - supply & install", "15700-L Heating, Ventilating & Air Conditioning Equipment", "15700-S Heating, Ventilating & Air Conditioning Equipment", "15710-L Forced air space heating and cooling system", "15710-M Forced air ducting - supply & install", "15710-S Forced air ducting - supply & install", "15751-L Local Exhaust", "15751-M Local Exhaust", "15751-S Local Exhaust", "15752-L Mechanical HVAC Misc.", "15752-M Mechanical HVAC Misc.", "15752-S Mechanical HVAC Misc.", "15800-L Air Filtration System - supply & install", "15800-M Air Filtration System - supply & install", "15800-S Air Filtration System - supply & install", "15900-L HVAC Instrumentation & Controls (In-wall Sensors, Thermostats)", "15900-M HVAC Instrumentation & Controls (In-wall Sensors, Thermostats)", "15900-S HVAC Instrumentation & Controls (In-wall Sensors, Thermostats)", "15950-L Testing, Adjusting, & Balancing", "15950-M Testing, Adjusting, & Balancing", "15950-S Testing, Adjusting, & Balancing"], "16 Electrical": ["16051 - S Building & Site Electrical Work", "16051-L Building & Site Electrical Work ", "16052-L Building & Site Electrical Work -  Electrical modifications of existing ", "16052-M Building & Site Electrical Work -  Electrical modifications of existing", "16052-S Building & Site Electrical Work -  Electrical modifications of existing", "16053-L Building & Site Electrical Work -  supply & install ", "16053-M Building & Site Electrical Work -  supply & install", "16053-S Building & Site Electrical Work -  supply & install", "16100-L PG+E Upgrade Coordination, layout and panel system install.", "16100-M PG+E Upgrade Coordination, layout and panel system install.", "16100-S PG+E Upgrade Coordination, layout and panel system install.", "16200-L Electrical Temp. Power", "16200-M Electrical Temp. Power", "16200-S Electrical Temp. Power", "16400-L Landscape Lighting", "16400-M Landscape Lighting", "16400-S Landscape Lighting", "16500-L Lighting - Owner/ Designer provided decorative lighting", "16500-M Lighting - Owner/ Designer provided decorative lighting", "16500-S Lighting - Owner/ Designer provided decorative lighting", "16700-L Communications - intercom systems", "16700-M Communications - intercom systems", "16700-S Communications - intercom systems", "16800-L Sound & Video (Speaker wire, Coaxial Cable, Cat 6e Supply & Install)", "16800-M Sound & Video (Speaker wire, Coaxial Cable, Cat 6e Supply & Install)", "16800-S Sound & Video (Speaker wire, Coaxial Cable, Cat 6e Supply & Install)", "16900-L Electric Radiant Flooring - supply & install", "16900-M Electric Radiant Flooring - supply & install", "16900-S Electric Radiant Flooring - supply & install", "16910-L Building & Site Electrical Work ", "16910-M Building & Site Electrical Work", "16910-S Building & Site Electrical Work"], "17 TAXES, OVERHEAD MARGIN": ["17000 General Liability", "17001 Sales Tax SF", "17002 Company Indirect Overhead & Profit Margin", "Customer Pre-Paid", "Retention (2.5%)", "Retention Payable"], "18 Uncommitted Budget Reserve": ["18011 Owner Contingency Reserve", "18012 Released Scope Reserve"], "Buildertrend Default": ["Buildertrend Flat Rate"]};
+
+// Flat list for search
+const ALL_CODES=[];
+for(const[cat,codes]of Object.entries(COST_CODES))for(const code of codes)ALL_CODES.push({cat,code});
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
+let SCOPE=[],BT_ITEMS=[],ASSIGNED_TO=[];
+let selectedScopeId=null,editingBTId=null,showUnmappedOnly=false;
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function fmt(n){if(n===null||n===undefined||n==='')return'—';return'$'+Math.round(Number(n)).toLocaleString()}
+function fmtFull(n){if(!n&&n!==0)return'—';return'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast '+type+' show';setTimeout(()=>el.classList.remove('show'),3000)}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab==='budget')renderBudget();
+  });
+});
+
+// ── LOAD ──────────────────────────────────────────────────────────────────────
+async function loadAll(){
+  try{
+    const [scopeRes,btRes,atRes,metaRes]=await Promise.all([
+      fetch(SCRIPT_URL+'?action=loadScope'),
+      fetch(SCRIPT_URL+'?action=loadBTItems'),
+      fetch(SCRIPT_URL+'?action=loadAssignedTo'),
+      fetch(SCRIPT_URL+'?action=loadMeta')
+    ]);
+    SCOPE=await scopeRes.json();
+    BT_ITEMS=await btRes.json();
+    ASSIGNED_TO=await atRes.json();
+    const meta=await metaRes.json();
+    const rf=document.getElementById('scope-room-filter');
+    rf.innerHTML='<option value="">All rooms</option>';
+    for(const r of meta.rooms){const o=document.createElement('option');o.value=r;o.textContent=r;rf.appendChild(o)}
+    document.getElementById('scope-sub').textContent=SCOPE.length+' items';
+  }catch(e){toast('Could not load data.','error');return}
+  renderScopeList();
+}
+
+// ── SCOPE LIST ────────────────────────────────────────────────────────────────
+function renderScopeList(){
+  const q=document.getElementById('scope-search').value.toLowerCase().trim();
+  const roomF=document.getElementById('scope-room-filter').value;
+  let items=SCOPE.filter(i=>{
+    if(roomF&&i.room!==roomF)return false;
+    if(q&&![i.scope,i.desc,i.room,i.group].join(' ').toLowerCase().includes(q))return false;
+    if(showUnmappedOnly&&BT_ITEMS.some(b=>b.scopeItemId===i.id))return false;
+    return true;
+  });
+  document.getElementById('scope-count').textContent=items.length+' item'+(items.length!==1?'s':'');
+  if(!items.length){document.getElementById('scope-list').innerHTML='<div class="list-empty">No items match.</div>';return}
+  let html='',lastRoom='';
+  for(const item of items){
+    if(item.room!==lastRoom){if(lastRoom)html+='</div>';html+=`<div class="list-room-hdr">${esc(item.room)}</div><div>`;lastRoom=item.room}
+    const isCo=item.type==='Change Order';
+    const badge=isCo?'<span class="badge badge-co">CO</span>':'<span class="badge badge-est">Est.</span>';
+    const assignee=item.assignedToId?ASSIGNED_TO.find(a=>a.id===item.assignedToId):null;
+    const btCount=BT_ITEMS.filter(b=>b.scopeItemId===item.id).length;
+    const btBadge=btCount>0?`<span class="scope-row-bt">${btCount} BT</span>`:showUnmappedOnly?'<span class="scope-row-unmapped">unmapped</span>':'';
+    const hasCosts=item.budget!==null||item.actual!==null;
+    html+=`<div class="scope-row${item.id===selectedScopeId?' selected':''}${btCount===0&&showUnmappedOnly?' unmapped-row':''}" data-id="${item.id}">
+      <div class="scope-row-main">
+        <div class="scope-row-name">${esc(item.scope)}</div>
+        <div class="scope-row-meta">${esc(item.group)} ${badge}${assignee?' · '+esc(assignee.name):''}</div>
+        ${item.desc?`<div class="scope-row-desc">${esc(item.desc)}</div>`:''}
+        ${hasCosts?`<div class="scope-row-costs">
+          <div class="src-item"><div class="src-label">Budget</div><div class="src-val">${fmt(item.budget)}</div></div>
+          <div class="src-item"><div class="src-label">Actual</div><div class="src-val">${fmt(item.actual)}</div></div>
+        </div>`:''}
+      </div>
+      ${btBadge}
+    </div>`;
+  }
+  if(lastRoom)html+='</div>';
+  document.getElementById('scope-list').innerHTML=html;
+}
+
+// unmapped filter toggle
+document.getElementById('unmapped-btn').addEventListener('click',function(){
+  showUnmappedOnly=!showUnmappedOnly;
+  this.classList.toggle('active',showUnmappedOnly);
+  this.textContent=showUnmappedOnly?'Show all':'Unmapped only';
+  renderScopeList();
+});
+
+// click to select scope item
+document.getElementById('scope-list').addEventListener('click',function(e){
+  const row=e.target.closest('.scope-row');if(!row)return;
+  selectedScopeId=row.dataset.id;
+  renderScopeList();
+  showSelectedScope();
+  renderBTItems();
+  document.getElementById('new-bt-btn').disabled=false;
+});
+
+function showSelectedScope(){
+  const item=SCOPE.find(i=>i.id===selectedScopeId);if(!item)return;
+  const assignee=item.assignedToId?ASSIGNED_TO.find(a=>a.id===item.assignedToId):null;
+  document.getElementById('selected-scope-title').textContent=item.scope;
+  document.getElementById('selected-scope-meta').textContent=item.room+' · '+item.group;
+  document.getElementById('sd-room').textContent=item.room||'—';
+  document.getElementById('sd-group').textContent=item.group||'—';
+  document.getElementById('sd-type').textContent=item.type||'—';
+  document.getElementById('sd-scope').textContent=item.scope||'—';
+  document.getElementById('sd-assigned').textContent=assignee?assignee.name+' ('+assignee.type+')':'—';
+  document.getElementById('sd-desc').textContent=item.desc||'—';
+  document.getElementById('sd-budget').textContent=fmt(item.budget);
+  document.getElementById('sd-actual').textContent=fmt(item.actual);
+  document.getElementById('selected-scope-detail').style.display='block';
+}
+
+// ── BT ITEMS LIST ─────────────────────────────────────────────────────────────
+function renderBTItems(){
+  const items=BT_ITEMS.filter(b=>b.scopeItemId===selectedScopeId);
+  document.getElementById('bt-items-sub').textContent=selectedScopeId?'BT lines for selected scope item':'Select a scope item';
+  document.getElementById('bt-items-count').textContent=items.length?items.length+' line'+(items.length!==1?'s':''):'';
+  if(!selectedScopeId){document.getElementById('bt-items-list').innerHTML='<div class="bt-none-selected">No scope item selected</div>';return}
+  if(!items.length){document.getElementById('bt-items-list').innerHTML='<div class="bt-no-items">No BT lines yet — click "New BT Line" to add one.</div>';return}
+  let html='';
+  for(const bt of items){
+    html+=`<div class="bt-item-row">
+      <div class="bt-item-main">
+        <div class="bt-item-title">${esc(bt.title)}</div>
+        ${bt.costCode?`<div class="bt-item-code">${esc(bt.costCode)}</div>`:''}
+        <div class="bt-item-cost">${fmt(bt.totalCost)}${bt.costType?' · '+esc(bt.costType):''}</div>
+      </div>
+      <div class="bt-item-actions">
+        <button class="btn-sm" data-action="edit-bt" data-id="${bt.id}">Edit</button>
+        <button class="btn-sm danger" data-action="del-bt" data-id="${bt.id}">Delete</button>
+      </div>
+    </div>`;
+  }
+  document.getElementById('bt-items-list').innerHTML=html;
+}
+
+// ── NEW BT LINE ───────────────────────────────────────────────────────────────
+document.getElementById('new-bt-btn').addEventListener('click',()=>{
+  if(!selectedScopeId)return;
+  const item=SCOPE.find(i=>i.id===selectedScopeId);
+  editingBTId=null;
+  document.getElementById('modal-title').textContent='New BT Line Item';
+  document.getElementById('modal-subtitle').textContent=item?item.scope+' · '+item.room:'';
+  document.getElementById('m-title').value=item?item.scope:'';
+  document.getElementById('m-desc').value=item&&item.desc?item.desc:'';
+  ['m-pg','m-pgd','m-sg','m-sgd','m-unit','m-notes','m-cost-type'].forEach(id=>document.getElementById(id).value='');
+  ['m-qty','m-unit-cost','m-total'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cc-search').value='';document.getElementById('m-cost-code').value='';
+  document.getElementById('cc-dropdown').classList.remove('open');
+  document.getElementById('modal-save').textContent='Save BT Line';
+  document.getElementById('bt-modal').classList.add('show');
+});
+
+// ── BT ITEM EVENTS (edit/delete) ──────────────────────────────────────────────
+document.getElementById('bt-items-list').addEventListener('click',async function(e){
+  const editBtn=e.target.closest('[data-action="edit-bt"]');
+  if(editBtn){
+    const bt=BT_ITEMS.find(b=>b.id===editBtn.dataset.id);if(!bt)return;
+    editingBTId=bt.id;
+    const item=SCOPE.find(i=>i.id===selectedScopeId);
+    document.getElementById('modal-title').textContent='Edit BT Line Item';
+    document.getElementById('modal-subtitle').textContent=item?item.scope+' · '+item.room:'';
+    document.getElementById('m-title').value=bt.title;
+    document.getElementById('m-desc').value=bt.description;
+    document.getElementById('m-pg').value=bt.parentGroup;
+    document.getElementById('m-pgd').value=bt.parentGroupDesc;
+    document.getElementById('m-sg').value=bt.subgroup;
+    document.getElementById('m-sgd').value=bt.subgroupDesc;
+    document.getElementById('cc-search').value=bt.costCode;
+    document.getElementById('m-cost-code').value=bt.costCode;
+    document.getElementById('m-qty').value=bt.quantity??'';
+    document.getElementById('m-unit').value=bt.unit;
+    document.getElementById('m-unit-cost').value=bt.unitCost??'';
+    document.getElementById('m-total').value=bt.totalCost??'';
+    document.getElementById('m-cost-type').value=bt.costType;
+    document.getElementById('m-notes').value=bt.internalNotes;
+    document.getElementById('modal-save').textContent='Save Changes';
+    document.getElementById('bt-modal').classList.add('show');
+    return;
+  }
+  const delBtn=e.target.closest('[data-action="del-bt"]');
+  if(delBtn){
+    const bt=BT_ITEMS.find(b=>b.id===delBtn.dataset.id);
+    if(!bt||!confirm(`Delete "${bt.title}"?`))return;
+    try{
+      await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'deleteBTItem',id:bt.id})});
+      BT_ITEMS=BT_ITEMS.filter(b=>b.id!==bt.id);
+      renderBTItems();renderScopeList();toast('BT line deleted.');
+    }catch(e){toast('Could not delete.','error')}
+  }
+});
+
+// ── SAVE MODAL ────────────────────────────────────────────────────────────────
+document.getElementById('modal-save').addEventListener('click',async()=>{
+  const title=document.getElementById('m-title').value.trim();
+  if(!title){toast('Title is required.','error');return}
+  const qty=document.getElementById('m-qty').value.trim();
+  const unitCost=document.getElementById('m-unit-cost').value.trim();
+  const totalInput=document.getElementById('m-total').value.trim();
+  let total=totalInput!==''?Number(totalInput):null;
+  if(total===null&&qty!==''&&unitCost!=='')total=Number(qty)*Number(unitCost);
+  const payload={
+    scopeItemId:selectedScopeId,title,
+    description:document.getElementById('m-desc').value.trim(),
+    parentGroup:document.getElementById('m-pg').value.trim(),
+    parentGroupDesc:document.getElementById('m-pgd').value.trim(),
+    subgroup:document.getElementById('m-sg').value.trim(),
+    subgroupDesc:document.getElementById('m-sgd').value.trim(),
+    costCode:document.getElementById('m-cost-code').value.trim(),
+    quantity:qty!==''?Number(qty):null,
+    unit:document.getElementById('m-unit').value.trim(),
+    unitCost:unitCost!==''?Number(unitCost):null,
+    costType:document.getElementById('m-cost-type').value,
+    totalCost:total,
+    internalNotes:document.getElementById('m-notes').value.trim()
+  };
+  const btn=document.getElementById('modal-save');btn.textContent='Saving…';btn.disabled=true;
+  try{
+    if(editingBTId){
+      const res=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'editBTItem',id:editingBTId,item:payload})});
+      const data=await res.json();
+      const idx=BT_ITEMS.findIndex(b=>b.id===editingBTId);
+      if(idx>-1)BT_ITEMS[idx]={...BT_ITEMS[idx],...payload,totalCost:data.totalCost??total};
+      toast('Updated.');
+    }else{
+      const res=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'addBTItem',item:payload})});
+      const data=await res.json();
+      BT_ITEMS.push({...payload,id:data.id,totalCost:data.totalCost??total});
+      toast('BT line added!');
+    }
+    document.getElementById('bt-modal').classList.remove('show');
+    renderBTItems();renderScopeList();editingBTId=null;
+  }catch(e){toast('Could not save.','error')}
+  btn.textContent=editingBTId?'Save Changes':'Save BT Line';btn.disabled=false;
+});
+document.getElementById('modal-cancel').addEventListener('click',()=>{document.getElementById('bt-modal').classList.remove('show');editingBTId=null});
+document.getElementById('bt-modal').addEventListener('click',function(e){if(e.target===this){this.classList.remove('show');editingBTId=null}});
+
+// ── COST CODE SEARCH ──────────────────────────────────────────────────────────
+const ccSearch=document.getElementById('cc-search');
+const ccDropdown=document.getElementById('cc-dropdown');
+ccSearch.addEventListener('input',function(){
+  const q=this.value.toLowerCase().trim();
+  if(!q){ccDropdown.classList.remove('open');return}
+  const matches=ALL_CODES.filter(c=>c.code.toLowerCase().includes(q)||c.cat.toLowerCase().includes(q)).slice(0,40);
+  if(!matches.length){ccDropdown.innerHTML='<div class="cc-empty">No matching codes</div>';ccDropdown.classList.add('open');return}
+  const grouped={};
+  for(const m of matches){if(!grouped[m.cat])grouped[m.cat]=[];grouped[m.cat].push(m.code)}
+  let html='';
+  for(const[cat,codes]of Object.entries(grouped)){
+    html+=`<div class="cc-cat">${esc(cat)}</div>`;
+    for(const code of codes){
+      const sel=code===document.getElementById('m-cost-code').value;
+      html+=`<div class="cc-option${sel?' selected':''}" data-code="${esc(code)}">${esc(code)}</div>`;
+    }
+  }
+  ccDropdown.innerHTML=html;ccDropdown.classList.add('open');
+});
+ccDropdown.addEventListener('click',function(e){
+  const opt=e.target.closest('.cc-option');if(!opt)return;
+  document.getElementById('m-cost-code').value=opt.dataset.code;
+  ccSearch.value=opt.dataset.code;
+  ccDropdown.classList.remove('open');
+});
+['m-qty','m-unit-cost'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',()=>{
+    const qty=document.getElementById('m-qty').value;
+    const uc=document.getElementById('m-unit-cost').value;
+    if(qty&&uc)document.getElementById('m-total').value=(Number(qty)*Number(uc)).toFixed(2);
+  });
+});
+document.addEventListener('click',e=>{if(!e.target.closest('.cc-wrap'))ccDropdown.classList.remove('open')});
+
+// ── BUDGET PREVIEW ────────────────────────────────────────────────────────────
+function getCat(code){
+  for(const[cat,codes]of Object.entries(COST_CODES)){if(codes.includes(code))return cat}
+  // Try numeric prefix match
+  const m=code.match(/^(\d+)/);
+  if(m){
+    const prefix=m[1];
+    for(const cat of Object.keys(COST_CODES)){
+      const cm=cat.match(/^(\d+)/);
+      if(cm&&cm[1]===prefix)return cat;
+    }
+  }
+  return 'Uncategorized';
+}
+
+function sortCatKey(cat){
+  const m=cat.match(/^(\d+)/);return m?parseInt(m[1]):999;
+}
+function sortCodeKey(code){
+  const m=code.match(/^(\d+)/);return m?parseInt(m[1]):999;
+}
+
+function renderBudget(){
+  const markup=Number(document.getElementById('markup-pct').value)||0;
+  const multiplier=1+markup/100;
+  if(!BT_ITEMS.length){
+    document.getElementById('budget-body').innerHTML='<div class="budget-empty">No BT line items yet. Add them in the BT Line Items tab.</div>';
+    document.getElementById('total-direct').textContent='—';
+    document.getElementById('total-client').textContent='—';
+    return;
+  }
+  // Build hierarchy
+  const hierarchy={};
+  for(const bt of BT_ITEMS){
+    const cat=bt.costCode?getCat(bt.costCode):'Uncategorized';
+    const code=bt.costCode||'(no code)';
+    if(!hierarchy[cat])hierarchy[cat]={};
+    if(!hierarchy[cat][code])hierarchy[cat][code]=[];
+    hierarchy[cat][code].push(bt);
+  }
+  // Sort categories numerically, then codes within each category
+  const sortedCats=Object.keys(hierarchy).sort((a,b)=>sortCatKey(a)-sortCatKey(b));
+
+  let totalDirect=0;
+  let html='';
+  for(const cat of sortedCats){
+    const codes=hierarchy[cat];
+    const catDirect=Object.values(codes).flat().reduce((s,b)=>s+(b.totalCost||0),0);
+    const catClient=catDirect*multiplier;
+    totalDirect+=catDirect;
+    const catId='cat-'+cat.replace(/\W/g,'_');
+    // Sort codes numerically within category
+    const sortedCodes=Object.keys(codes).sort((a,b)=>sortCodeKey(a)-sortCodeKey(b));
+    html+=`<div>
+      <div class="bt-cat-row" data-cat="${catId}">
+        <div class="bt-cat-label"><span class="bt-cat-chevron">▾</span>${esc(cat)}</div>
+        <div class="bt-cat-total">${fmtFull(catDirect)}</div>
+        <div class="bt-cat-total client">${fmtFull(catClient)}</div>
+      </div>
+      <div class="bt-cat-section" id="${catId}">`;
+    for(const code of sortedCodes){
+      const items=codes[code];
+      const codeDirect=items.reduce((s,b)=>s+(b.totalCost||0),0);
+      const codeClient=codeDirect*multiplier;
+      const codeId='code-'+cat.replace(/\W/g,'_')+'-'+code.replace(/\W/g,'_');
+      html+=`<div>
+        <div class="bt-code-row" data-code="${codeId}">
+          <div class="bt-code-label"><span class="bt-code-chevron">▾</span>${esc(code)}</div>
+          <div class="bt-code-total">${fmtFull(codeDirect)}</div>
+          <div class="bt-code-total client">${fmtFull(codeClient)}</div>
+        </div>
+        <div class="bt-code-section" id="${codeId}">`;
+      for(const bt of items){
+        const d=bt.totalCost||0;const c=d*multiplier;
+        html+=`<div class="bt-line-row">
+          <div>${esc(bt.title)}${bt.costType?` <span style="font-size:11px;color:#C0B8AC">(${esc(bt.costType)})</span>`:''}</div>
+          <div class="bt-line-cost">${fmtFull(d)}</div>
+          <div class="bt-line-cost client">${fmtFull(c)}</div>
+        </div>`;
+      }
+      html+=`</div></div>`;
+    }
+    html+=`</div></div>`;
+  }
+  document.getElementById('budget-body').innerHTML=html;
+  document.getElementById('total-direct').textContent=fmtFull(totalDirect);
+  document.getElementById('total-client').textContent=fmtFull(totalDirect*multiplier);
+
+  // Attach collapse/expand click handlers
+  document.querySelectorAll('.bt-cat-row').forEach(row=>{
+    row.addEventListener('click',()=>{
+      const sec=document.getElementById(row.dataset.cat);
+      const collapsed=sec.style.display==='none';
+      sec.style.display=collapsed?'':'none';
+      row.classList.toggle('collapsed',!collapsed);
+    });
+  });
+  document.querySelectorAll('.bt-code-row').forEach(row=>{
+    row.addEventListener('click',()=>{
+      const sec=document.getElementById(row.dataset.code);
+      const collapsed=sec.style.display==='none';
+      sec.style.display=collapsed?'':'none';
+      row.classList.toggle('collapsed',!collapsed);
+    });
+  });
+}
+
+// Budget collapse/expand all controls
+document.getElementById('expand-cats').addEventListener('click',()=>{
+  document.querySelectorAll('.bt-cat-section').forEach(s=>s.style.display='');
+  document.querySelectorAll('.bt-cat-row').forEach(r=>r.classList.remove('collapsed'));
+});
+document.getElementById('collapse-cats').addEventListener('click',()=>{
+  document.querySelectorAll('.bt-cat-section').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.bt-cat-row').forEach(r=>r.classList.add('collapsed'));
+});
+document.getElementById('expand-codes').addEventListener('click',()=>{
+  document.querySelectorAll('.bt-code-section').forEach(s=>s.style.display='');
+  document.querySelectorAll('.bt-code-row').forEach(r=>r.classList.remove('collapsed'));
+});
+document.getElementById('collapse-codes').addEventListener('click',()=>{
+  document.querySelectorAll('.bt-code-section').forEach(s=>s.style.display='none');
+  document.querySelectorAll('.bt-code-row').forEach(r=>r.classList.add('collapsed'));
+});
+
+document.getElementById('markup-pct').addEventListener('input',renderBudget);
+document.getElementById('scope-search').addEventListener('input',renderScopeList);
+document.getElementById('scope-room-filter').addEventListener('change',renderScopeList);
+
+loadAll();
+
+// ── CLIENT REPORT TAB ─────────────────────────────────────────────────────────
+function setCrContType(type){
+  document.getElementById('cr-cont-type').value=type;
+  document.getElementById('cr-cont-pct-btn').className='type-opt'+(type==='pct'?' active-est':'');
+  document.getElementById('cr-cont-flat-btn').className='type-opt'+(type==='flat'?' active-est':'');
+  document.getElementById('cr-cont-symbol').textContent=type==='pct'?'%':'$';
+  if(type==='flat'){document.getElementById('cr-cont-symbol').style.left='9px';document.getElementById('cr-cont-value').style.paddingLeft='22px';}
+  else{document.getElementById('cr-cont-symbol').style.right='9px';document.getElementById('cr-cont-symbol').style.left='auto';document.getElementById('cr-cont-value').style.paddingRight='22px';document.getElementById('cr-cont-value').style.paddingLeft='11px';}
+}
+
+function buildSpotlightFields(){
+  const el=document.getElementById('spotlight-list');
+  if(!el)return;
+  const groups=[...new Set(SCOPE.map(i=>i.group))].sort();
+  const rooms=[...new Set(SCOPE.map(i=>i.room))].sort();
+  let html='';
+  for(let i=1;i<=4;i++){
+    html+=`<div style="border:0.5px solid #EDE9E2;border-radius:3px;padding:10px 12px;margin-bottom:8px">
+      <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#A08B5B;margin-bottom:8px">Spotlight ${i}</div>
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;margin-bottom:6px">
+        <select class="form-select" id="cr-sl${i}-type" onchange="updateSpotlightSelect(${i})">
+          <option value="">— None —</option>
+          <option value="scope">Scope Area</option>
+          <option value="room">Room</option>
+        </select>
+        <select class="form-select" id="cr-sl${i}-id"><option value="">Select first…</option></select>
+      </div>
+      <textarea class="form-textarea" id="cr-sl${i}-note" style="min-height:48px" placeholder="Short custom note for this spotlight…"></textarea>
+    </div>`;
+  }
+  el.innerHTML=html;
+}
+
+function updateSpotlightSelect(i){
+  const type=document.getElementById('cr-sl'+i+'-type').value;
+  const sel=document.getElementById('cr-sl'+i+'-id');
+  sel.innerHTML='<option value="">Select…</option>';
+  if(!type)return;
+  const items=type==='scope'?[...new Set(SCOPE.map(x=>x.group))].sort():[...new Set(SCOPE.map(x=>x.room))].sort();
+  for(const item of items){const o=document.createElement('option');o.value=item;o.textContent=item;sel.appendChild(o);}
+}
+
+async function loadClientReport(){
+  try{
+    const res=await fetch(SCRIPT_URL+'?action=loadClientReport');
+    const data=await res.json();
+    if(!data||!Object.keys(data).length)return;
+    document.getElementById('cr-client').value=data.clientName||'';
+    document.getElementById('cr-address').value=data.projectAddress||'';
+    document.getElementById('cr-date').value=data.proposalDate||'';
+    document.getElementById('cr-preparedby').value=data.preparedBy||'';
+    document.getElementById('cr-narrative').value=data.narrative||'';
+    document.getElementById('cr-markup').value=data.markupPct||'';
+    document.getElementById('cr-cont-type').value=data.contingencyType||'pct';
+    document.getElementById('cr-cont-value').value=data.contingencyValue||'';
+    document.getElementById('cr-show-cont').checked=data.showContingency!=='false';
+    document.getElementById('cr-show-ni').checked=data.showNotIncluded!=='false';
+    document.getElementById('cr-show-alts').checked=data.showAlternates!=='false';
+    setCrContType(data.contingencyType||'pct');
+    if(data.alternatesFormUrl){
+      document.getElementById('cr-form-url').value=data.alternatesFormUrl;
+      document.getElementById('cr-form-url-wrap').style.display='block';
+      document.getElementById('cr-form-status').textContent='Form active · submissions email jen@trinitybuildingco.com';
+      document.getElementById('cr-form-status').style.color='#5A8A6A';
+    }
+    // Load spotlights
+    for(let i=1;i<=4;i++){
+      if(data['spotlight'+i+'Type']){
+        document.getElementById('cr-sl'+i+'-type').value=data['spotlight'+i+'Type'];
+        updateSpotlightSelect(i);
+        setTimeout(()=>{
+          document.getElementById('cr-sl'+i+'-id').value=data['spotlight'+i+'Id']||'';
+          document.getElementById('cr-sl'+i+'-note').value=data['spotlight'+i+'Note']||'';
+        },50);
+      }
+    }
+  }catch(e){console.error('loadClientReport',e);}
+}
+
+document.getElementById('cr-save-btn').addEventListener('click',async()=>{
+  const report={
+    clientName:document.getElementById('cr-client').value,
+    projectAddress:document.getElementById('cr-address').value,
+    proposalDate:document.getElementById('cr-date').value,
+    preparedBy:document.getElementById('cr-preparedby').value,
+    narrative:document.getElementById('cr-narrative').value,
+    markupPct:document.getElementById('cr-markup').value,
+    contingencyType:document.getElementById('cr-cont-type').value,
+    contingencyValue:document.getElementById('cr-cont-value').value,
+    showContingency:document.getElementById('cr-show-cont').checked?'true':'false',
+    showNotIncluded:document.getElementById('cr-show-ni').checked?'true':'false',
+    showAlternates:document.getElementById('cr-show-alts').checked?'true':'false',
+  };
+  for(let i=1;i<=4;i++){
+    report['spotlight'+i+'Type']=document.getElementById('cr-sl'+i+'-type').value;
+    report['spotlight'+i+'Id']=document.getElementById('cr-sl'+i+'-id').value;
+    report['spotlight'+i+'Note']=document.getElementById('cr-sl'+i+'-note').value;
+  }
+  // Preserve existing form URL
+  const existing=await fetch(SCRIPT_URL+'?action=loadClientReport').then(r=>r.json()).catch(()=>({}));
+  if(existing.alternatesFormUrl)report.alternatesFormUrl=existing.alternatesFormUrl;
+  const btn=document.getElementById('cr-save-btn');btn.textContent='Saving…';btn.disabled=true;
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'saveClientReport',report})});
+    toast('Client report settings saved!');
+  }catch(e){toast('Could not save.','error');}
+  btn.textContent='Save Client Report Settings';btn.disabled=false;
+});
+
+document.getElementById('cr-gen-form-btn').addEventListener('click',async()=>{
+  const btn=document.getElementById('cr-gen-form-btn');
+  btn.textContent='Generating…';btn.disabled=true;
+  document.getElementById('cr-form-status').textContent='Creating Google Form…';
+  document.getElementById('cr-form-status').style.color='#C4913A';
+  try{
+    const res=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'generateAlternatesForm'})});
+    const data=await res.json();
+    if(data.ok){
+      document.getElementById('cr-form-url').value=data.formUrl;
+      document.getElementById('cr-form-url-wrap').style.display='block';
+      document.getElementById('cr-form-status').textContent='Form created! Submissions will email jen@trinitybuildingco.com';
+      document.getElementById('cr-form-status').style.color='#5A8A6A';
+      toast('Alternates Form created!');
+    } else {
+      document.getElementById('cr-form-status').textContent=data.error||'Could not generate form.';
+      document.getElementById('cr-form-status').style.color='#A84040';
+      toast(data.error||'Could not generate form.','error');
+    }
+  }catch(e){toast('Error generating form.','error');}
+  btn.textContent='Regenerate Alternates Form';btn.disabled=false;
+});
+
+// Hook into tab switch to build spotlight fields and load data
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(btn.dataset.tab==='clientreport'){
+      buildSpotlightFields();
+      loadClientReport();
+    }
+  });
+});
+
+</script>
+</body>
+</html>

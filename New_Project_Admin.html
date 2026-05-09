@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>::New Project Name:: — Scope Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#FAF8F5;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2C2C2A;min-height:100vh;-webkit-font-smoothing:antialiased;font-size:14px}
+.header{background:#2C2C2A;padding:22px 24px 18px}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.eyebrow{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#A08B5B;font-weight:400;margin-bottom:4px}
+.header-title{font-size:22px;font-weight:500;color:#FAF8F5}
+.header-sub{font-size:13px;color:#8A8070;margin-top:3px}
+.header-badge{background:#A84040;color:#FAF8F5;font-size:11px;font-weight:500;padding:4px 12px;border-radius:2px;letter-spacing:0.08em;text-transform:uppercase}
+.tabs{background:#FAF8F5;border-bottom:1px solid #DDD8CF;padding:0 24px}
+.tabs-inner{max-width:1100px;margin:0 auto;display:flex;gap:0}
+.tab-btn{padding:14px 20px;font-size:13px;font-weight:400;color:#8A8070;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:0.02em;transition:all 0.15s;white-space:nowrap}
+.tab-btn:hover{color:#2C2C2A}
+.tab-btn.active{color:#A08B5B;border-bottom-color:#A08B5B;font-weight:500}
+.tab-content{display:none;max-width:1100px;margin:24px auto;padding:0 20px 60px}
+.tab-content.active{display:block}
+.two-col{display:grid;grid-template-columns:380px 1fr;gap:20px;align-items:start}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:780px){.two-col{grid-template-columns:1fr}.form-row-2{grid-template-columns:1fr}}
+.card{background:white;border-radius:4px;border:1px solid #DDD8CF;overflow:hidden;box-shadow:0 1px 4px rgba(44,44,42,0.04)}
+.card-header{padding:14px 18px;border-bottom:1px solid #DDD8CF;background:#FDFCFA;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.card-title{font-size:15px;font-weight:500;color:#2C2C2A}
+.card-sub{font-size:12px;color:#8A8070;margin-top:2px}
+.card-body{padding:18px}
+.form-group{margin-bottom:13px}
+.form-label{display:block;font-size:11px;font-weight:400;color:#8A8070;margin-bottom:4px;letter-spacing:0.06em;text-transform:uppercase}
+.form-label .req{color:#A84040;margin-left:2px}
+.form-label .opt{color:#C0B8AC;font-weight:300}
+.form-input,.form-select,.form-textarea{width:100%;padding:9px 11px;background:white;border:1px solid #DDD8CF;border-radius:3px;color:#2C2C2A;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;outline:none;transition:border-color 0.15s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:#A08B5B;box-shadow:0 0 0 2px rgba(160,139,91,0.12)}
+.form-input::placeholder,.form-textarea::placeholder{color:#C0B8AC}
+.form-textarea{resize:vertical;min-height:64px;line-height:1.5}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%238A8070' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;cursor:pointer}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cost-wrap{position:relative}
+.cost-wrap .currency{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#8A8070;font-size:13px;pointer-events:none}
+.cost-wrap .form-input{padding-left:22px}
+.type-toggle{display:flex;border:1px solid #DDD8CF;border-radius:3px;overflow:hidden}
+.type-opt{flex:1;padding:9px;text-align:center;cursor:pointer;font-size:12px;font-weight:400;color:#8A8070;background:white;border:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;transition:all 0.15s;letter-spacing:0.03em}
+.type-opt:not(:last-child){border-right:1px solid #DDD8CF}
+.type-opt:hover{background:#F0EDE8}
+.type-opt.active-est{background:#F0EDE8;color:#8A7050}
+.type-opt.active-co{background:#FDF5E8;color:#9A6E20}
+.section-divider{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#A08B5B;padding:6px 0 8px;border-bottom:1px solid #EDE9E2;margin-bottom:12px;margin-top:4px}
+.btn-primary{width:100%;padding:10px;background:#2C2C2A;border:none;border-radius:3px;color:#FAF8F5;font-size:12px;font-weight:400;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;transition:background 0.15s;letter-spacing:0.08em;text-transform:uppercase}
+.btn-primary:hover{background:#A08B5B}
+.btn-primary:disabled{background:#C0B8AC;cursor:not-allowed}
+.btn-sm{padding:4px 10px;background:white;border:1px solid #DDD8CF;border-radius:3px;font-size:12px;font-weight:400;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;color:#8A8070;transition:all 0.15s;white-space:nowrap}
+.btn-sm:hover{background:#F0EDE8;border-color:#A08B5B;color:#A08B5B}
+.btn-sm.danger{border-color:#E8D0D0;color:#A86060}
+.btn-sm.danger:hover{background:#FAF0F0;border-color:#A84040;color:#A84040}
+
+/* ── SCOPE LIST — collapsible room sections, larger headers ── */
+.list-controls{display:flex;gap:8px;padding:10px 14px;border-bottom:1px solid #DDD8CF;background:#FDFCFA;flex-wrap:wrap;align-items:center}
+.list-search{flex:1;min-width:120px;padding:7px 10px;background:white;border:1px solid #DDD8CF;border-radius:3px;color:#2C2C2A;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;outline:none}
+.list-search:focus{border-color:#A08B5B}
+.list-filter{padding:7px 10px;background:white;border:1px solid #DDD8CF;border-radius:3px;color:#8A8070;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;outline:none;cursor:pointer}
+.list-count{font-size:11px;color:#8A8070;white-space:nowrap;font-family:'DM Mono',monospace}
+.list-body{max-height:580px;overflow-y:auto}
+/* Collapsible room section header — larger, clickable */
+.list-room-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 14px 7px;font-size:13px;font-weight:600;color:#2C2C2A;letter-spacing:0.04em;text-transform:uppercase;background:#F5F2EE;border-bottom:1px solid #DDD8CF;cursor:pointer;user-select:none;position:sticky;top:0;z-index:1;transition:background 0.15s}
+.list-room-hdr:hover{background:#EDE9E2}
+.list-room-hdr-left{display:flex;align-items:center;gap:8px}
+.list-room-chevron{font-size:10px;color:#8A8070;transition:transform 0.2s}
+.list-room-hdr.collapsed .list-room-chevron{transform:rotate(-90deg)}
+.list-room-count{font-size:11px;color:#8A8070;font-weight:400;font-family:'DM Mono',monospace}
+.list-room-body{overflow:hidden}
+.list-empty{text-align:center;padding:36px 20px;color:#8A8070;font-size:13px;font-style:italic}
+.spinner{width:20px;height:20px;border:1.5px solid #DDD8CF;border-top-color:#A08B5B;border-radius:50%;animation:spin 0.7s linear infinite;margin:28px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.list-row{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:1px solid #F0EDE8;transition:background 0.1s}
+.list-row:last-child{border-bottom:none}
+.list-row:hover{background:#FDFCFA}
+.list-row.co-row{border-left:2px solid #C4913A;background:#FEFBF3}
+.list-row-main{flex:1;min-width:0}
+.list-row-name{font-size:13px;font-weight:400;color:#2C2C2A;line-height:1.3}
+.list-row-meta{font-size:12px;color:#8A8070;margin-top:2px}
+.list-row-desc{font-size:12px;color:#A08B5B;margin-top:2px;font-style:italic}
+.list-row-costs{display:flex;gap:12px;margin-top:4px}
+.lrc-item{display:flex;flex-direction:column;gap:1px}
+.lrc-label{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:#C0B8AC}
+.lrc-val{font-family:'DM Mono',monospace;font-size:12px;color:#8A8070}
+.lrc-val.empty{color:#D8D0C8}
+.list-row-actions{display:flex;gap:5px;flex-shrink:0;padding-top:2px}
+.badge{font-size:11px;font-weight:400;padding:2px 7px;border-radius:2px;white-space:nowrap;display:inline-block;margin-top:3px}
+.badge-est{background:#F0EDE8;color:#8A7050}
+.badge-co{background:#FDF0D8;color:#9A6E20;font-weight:500}
+
+/* ── META LIST (rooms/groups) ── */
+.meta-list{display:flex;flex-direction:column;gap:6px;padding:14px}
+.meta-item{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#FAF8F5;border:0.5px solid #DDD8CF;border-radius:3px}
+.meta-item-name{font-size:13px;color:#2C2C2A;flex:1}
+.meta-item-actions{display:flex;gap:4px;flex-shrink:0}
+.meta-add-row{display:flex;gap:8px;padding:10px 14px;border-top:1px solid #EDE9E2}
+.meta-add-input{flex:1;padding:8px 10px;background:white;border:1px solid #DDD8CF;border-radius:3px;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;outline:none;color:#2C2C2A}
+.meta-add-input:focus{border-color:#A08B5B}
+.meta-add-input::placeholder{color:#C0B8AC}
+
+/* inline edit for meta items */
+.meta-edit-input{flex:1;padding:5px 8px;background:white;border:1px solid #A08B5B;border-radius:3px;font-size:13px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;outline:none;color:#2C2C2A}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;padding:11px 16px;border-radius:3px;font-size:13px;color:#FAF8F5;z-index:999;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.success{background:#2C2C2A}
+.toast.error{background:#A84040}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,44,42,0.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.show{opacity:1;pointer-events:all}
+.modal{background:white;border-radius:4px;padding:24px;width:100%;max-width:460px;box-shadow:0 8px 40px rgba(44,44,42,0.2);max-height:90vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:500;color:#2C2C2A;margin-bottom:18px}
+.modal-actions{display:flex;gap:8px;margin-top:18px}
+.btn-cancel{flex:1;padding:9px;background:white;border:1px solid #DDD8CF;border-radius:3px;color:#8A8070;font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;letter-spacing:0.03em}
+.btn-cancel:hover{background:#F0EDE8}
+.btn-save{flex:2;padding:9px;background:#2C2C2A;border:none;border-radius:3px;color:#FAF8F5;font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;letter-spacing:0.06em;text-transform:uppercase}
+.btn-save:hover{background:#A08B5B}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="eyebrow">::New Project Name::</div>
+      <div class="header-title">Scope Admin</div>
+      <div class="header-sub">Manage scope, subcontractors, files, rooms & locations</div>
+    </div>
+    <div class="header-badge">Admin Only</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" data-tab="scope">Scope Items</button>
+    <button class="tab-btn" data-tab="subs">Assigned To</button>
+    <button class="tab-btn" data-tab="files">Room Files</button>
+    <button class="tab-btn" data-tab="meta">Rooms & Locations</button>
+  </div>
+</div>
+
+<!-- ══ SCOPE TAB ══════════════════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-scope">
+  <div class="two-col">
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Add Scope Item</div><div class="card-sub">Appears in tracker on next refresh</div></div>
+      </div>
+      <div class="card-body">
+        <div class="form-group"><label class="form-label">Room / Location <span class="req">*</span></label><select class="form-select" id="f-room"><option value="">Loading…</option></select></div>
+        <div class="form-group"><label class="form-label">Scope Area <span class="req">*</span></label><select class="form-select" id="f-group"><option value="">Loading…</option></select></div>
+        <div class="form-group"><label class="form-label">Scope Name <span class="req">*</span></label><input class="form-input" id="f-scope" type="text" placeholder="e.g. Install pendant lights"></div>
+        <div class="form-group"><label class="form-label">Description <span class="opt">(optional)</span></label><textarea class="form-textarea" id="f-desc" placeholder="Notes, quantities, location…"></textarea></div>
+        <div class="form-group">
+          <label class="form-label">Type <span class="req">*</span></label>
+          <div class="type-toggle"><button class="type-opt active-est" id="type-est-btn">From Estimate</button><button class="type-opt" id="type-co-btn">Change Order</button><button class="type-opt" id="type-alt-btn">Alternate</button></div>
+          <input type="hidden" id="f-type" value="Estimate">
+        </div>
+        <div class="form-group"><label class="form-label">Assigned To <span class="opt">(optional)</span></label><select class="form-select" id="f-assigned"><option value="">— Not assigned —</option></select></div>
+        <div class="section-divider">Costs (optional)</div>
+        <div class="form-row">
+          <div class="form-group" style="margin:0"><label class="form-label">Budget</label><div class="cost-wrap"><span class="currency">$</span><input class="form-input" id="f-budget" type="number" min="0" step="1" placeholder="0"></div></div>
+          <div class="form-group" style="margin:0"><label class="form-label">Actual</label><div class="cost-wrap"><span class="currency">$</span><input class="form-input" id="f-actual" type="number" min="0" step="1" placeholder="0"></div></div>
+        </div>
+        <button class="btn-primary" id="btn-add-scope" style="margin-top:16px">Add Scope Item</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" style="display:flex;align-items:center;gap:12px">
+        <div><div class="card-title">All Scope Items</div><div class="card-sub" id="scope-subtitle">Loading…</div></div>
+        <span class="list-count" id="scope-count"></span>
+      </div>
+      <div class="list-controls">
+        <input class="list-search" id="scope-search" type="text" placeholder="Search…">
+        <select class="list-filter" id="scope-room-filter"><option value="">All rooms</option></select>
+        <select class="list-filter" id="scope-type-filter"><option value="">All types</option><option value="Estimate">Estimate</option><option value="Change Order">Change Order</option></select>
+      </div>
+      <div class="list-body" id="scope-list"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ASSIGNED TO TAB ══════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-subs">
+  <div class="two-col">
+    <div class="card">
+      <div class="card-header"><div><div class="card-title">Add to Assigned To List</div><div class="card-sub">Define who performs work on this project</div></div></div>
+      <div class="card-body">
+        <div class="form-group"><label class="form-label">Name <span class="req">*</span></label><input class="form-input" id="at-name" type="text" placeholder="e.g. Pacific Electric Co."></div>
+        <div class="form-group">
+          <label class="form-label">Type <span class="req">*</span></label>
+          <select class="form-select" id="at-type">
+            <option value="">Select type…</option>
+            <option value="Subcontractor">Subcontractor</option>
+            <option value="Trinity Building Co (TBC)">Trinity Building Co (TBC)</option>
+            <option value="Owner">Owner</option>
+            <option value="TBD">TBD</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Notes <span class="opt">(optional)</span></label><textarea class="form-textarea" id="at-notes" placeholder="Contact info, trade specialty, schedule notes…"></textarea></div>
+        <button class="btn-primary" id="btn-add-at">Add to List</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div><div class="card-title">Assigned To List</div><div class="card-sub" id="at-subtitle">Loading…</div></div></div>
+      <div class="list-body" id="at-list"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FILES TAB ════════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-files">
+  <div class="two-col">
+    <div class="card">
+      <div class="card-header"><div><div class="card-title">Add Room File</div><div class="card-sub">Paste a Google Drive share link</div></div></div>
+      <div class="card-body">
+        <div class="form-group"><label class="form-label">Room / Location <span class="req">*</span></label><select class="form-select" id="file-room"><option value="">Loading…</option></select></div>
+        <div class="form-group"><label class="form-label">File Name <span class="req">*</span></label><input class="form-input" id="file-name" type="text" placeholder="e.g. Bar Hugo Floor Plan v3.pdf"></div>
+        <div class="form-group"><label class="form-label">Google Drive URL <span class="req">*</span></label><input class="form-input" id="file-url" type="url" placeholder="https://drive.google.com/file/d/…"></div>
+        <button class="btn-primary" id="btn-add-file">Add File</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div><div class="card-title">All Room Files</div><div class="card-sub" id="files-subtitle">Loading…</div></div></div>
+      <div class="list-controls">
+        <input class="list-search" id="files-search" type="text" placeholder="Search…">
+        <select class="list-filter" id="files-room-filter"><option value="">All rooms</option></select>
+      </div>
+      <div class="list-body" id="files-list"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ROOMS & LOCATIONS TAB ══════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-meta">
+  <div class="form-row-2" style="align-items:start;gap:20px">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Rooms & Locations</div></div>
+      <div class="meta-list" id="rooms-list"><div class="spinner"></div></div>
+      <div class="meta-add-row">
+        <input class="meta-add-input" id="new-room-input" type="text" placeholder="New room or location name…">
+        <button class="btn-sm" id="btn-add-room">Add</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Scope Areas</div></div>
+      <div class="meta-list" id="groups-list"><div class="spinner"></div></div>
+      <div class="meta-add-row">
+        <input class="meta-add-input" id="new-group-input" type="text" placeholder="New scope area name…">
+        <button class="btn-sm" id="btn-add-group">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCOPE EDIT MODAL -->
+<div class="modal-overlay" id="scope-modal">
+  <div class="modal">
+    <div class="modal-title">Edit Scope Item</div>
+    <div class="form-group"><label class="form-label">Room / Location</label><select class="form-select" id="e-room"><option value="">Loading…</option></select></div>
+    <div class="form-group"><label class="form-label">Scope Area</label><select class="form-select" id="e-group"><option value="">Loading…</option></select></div>
+    <div class="form-group"><label class="form-label">Scope Name</label><input class="form-input" id="e-scope" type="text"></div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="e-desc"></textarea></div>
+    <div class="form-group"><label class="form-label">Type</label>
+      <div class="type-toggle"><button class="type-opt" id="e-type-est-btn">From Estimate</button><button class="type-opt" id="e-type-co-btn">Change Order</button><button class="type-opt" id="e-type-alt-btn">Alternate</button></div>
+      <input type="hidden" id="e-type" value="Estimate">
+    </div>
+    <div class="form-group"><label class="form-label">Assigned To</label><select class="form-select" id="e-assigned"><option value="">— Not assigned —</option></select></div>
+    <div class="section-divider">Costs</div>
+    <div class="form-row">
+      <div class="form-group" style="margin:0"><label class="form-label">Budget</label><div class="cost-wrap"><span class="currency">$</span><input class="form-input" id="e-budget" type="number" min="0" step="1" placeholder="0"></div></div>
+      <div class="form-group" style="margin:0"><label class="form-label">Actual</label><div class="cost-wrap"><span class="currency">$</span><input class="form-input" id="e-actual" type="number" min="0" step="1" placeholder="0"></div></div>
+    </div>
+    <div class="modal-actions"><button class="btn-cancel" id="scope-modal-cancel">Cancel</button><button class="btn-save" id="scope-modal-save">Save Changes</button></div>
+  </div>
+</div>
+
+<!-- META EDIT MODAL -->
+<div class="modal-overlay" id="meta-modal">
+  <div class="modal">
+    <div class="modal-title" id="meta-modal-title">Edit Name</div>
+    <div class="form-group">
+      <label class="form-label">New Name</label>
+      <input class="form-input" id="meta-edit-val" type="text">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="meta-modal-cancel">Cancel</button>
+      <button class="btn-save" id="meta-modal-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxYdeDPuexKgvezjLYmSTRJOZ-Zf3NYHwa0huXsNPPR3aXqeNF4N8i8deGzfnJT8Wx-gg/exec';
+
+let SCOPE=[],AT=[],FILES=[],ROOMS=[],GROUPS=[];
+let editingScopeId=null,editingMetaType=null,editingMetaOldName=null;
+
+function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast '+type+' show';setTimeout(()=>el.classList.remove('show'),3000)}
+function fmt(n){if(n===null||n===undefined||n==='')return'-';return'$'+Math.round(Number(n)).toLocaleString()}
+function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ── LOAD ──────────────────────────────────────────────────────────────────────
+async function loadAll(){
+  try{
+    const [metaRes,scopeRes,atRes,filesRes]=await Promise.all([
+      fetch(SCRIPT_URL+'?action=loadMeta'),
+      fetch(SCRIPT_URL+'?action=loadScope'),
+      fetch(SCRIPT_URL+'?action=loadAssignedTo'),
+      fetch(SCRIPT_URL+'?action=loadFiles')
+    ]);
+    const meta=await metaRes.json();
+    ROOMS=meta.rooms; GROUPS=meta.groups;
+    SCOPE=await scopeRes.json();
+    AT=await atRes.json();
+    FILES=await filesRes.json();
+  }catch(e){toast('Could not load data — check connection.','error');return}
+  populateAllDropdowns();
+  renderScopeList();
+  renderATList();
+  renderFilesList();
+  renderMeta();
+}
+
+// ── DROPDOWNS ─────────────────────────────────────────────────────────────────
+function fillSelect(id,items,placeholder){
+  const el=document.getElementById(id);if(!el)return;
+  el.innerHTML=placeholder?`<option value="">${placeholder}</option>`:'';
+  for(const item of items){const o=document.createElement('option');o.value=item;o.textContent=item;el.appendChild(o)}
+}
+function fillRoomFilter(id){
+  const el=document.getElementById(id);if(!el)return;
+  el.innerHTML='<option value="">All rooms</option>';
+  for(const r of ROOMS){const o=document.createElement('option');o.value=r;o.textContent=r;el.appendChild(o)}
+}
+function fillAT(id){
+  const el=document.getElementById(id);if(!el)return;
+  const cur=el.value;
+  el.innerHTML='<option value="">— Not assigned —</option>';
+  for(const a of AT){const o=document.createElement('option');o.value=a.id;o.textContent=a.name+(a.type?' ('+a.type+')':'');el.appendChild(o)}
+  el.value=cur;
+}
+function populateAllDropdowns(){
+  fillSelect('f-room',ROOMS,'Select room / location…');
+  fillSelect('f-group',GROUPS,'Select scope area…');
+  fillSelect('e-room',ROOMS,'');
+  fillSelect('e-group',GROUPS,'');
+  fillSelect('file-room',ROOMS,'Select room / location…');
+  fillRoomFilter('scope-room-filter');
+  fillRoomFilter('files-room-filter');
+  fillAT('f-assigned');fillAT('e-assigned');
+  document.getElementById('scope-subtitle').textContent=SCOPE.length+' items loaded';
+  document.getElementById('at-subtitle').textContent=AT.length+' entr'+(AT.length!==1?'ies':'y');
+  document.getElementById('files-subtitle').textContent=FILES.length+' file'+(FILES.length!==1?'s':'');
+}
+
+// ── SCOPE LIST — collapsible room sections ────────────────────────────────────
+const collapsedRooms=new Set();
+function renderScopeList(){
+  const q=document.getElementById('scope-search').value.toLowerCase().trim();
+  const roomF=document.getElementById('scope-room-filter').value;
+  const typeF=document.getElementById('scope-type-filter').value;
+  let items=SCOPE.filter(i=>{
+    if(roomF&&i.room!==roomF)return false;
+    if(typeF&&i.type!==typeF)return false;
+    if(q&&![i.scope,i.desc,i.room,i.group].join(' ').toLowerCase().includes(q))return false;
+    return true;
+  });
+  document.getElementById('scope-count').textContent=items.length+' item'+(items.length!==1?'s':'');
+  if(!items.length){document.getElementById('scope-list').innerHTML='<div class="list-empty">No items match your filters.</div>';return}
+
+  // Group by room
+  const grouped={};
+  for(const item of items){
+    if(!grouped[item.room])grouped[item.room]=[];
+    grouped[item.room].push(item);
+  }
+
+  let html='';
+  for(const[room,roomItems]of Object.entries(grouped)){
+    const isCollapsed=collapsedRooms.has(room);
+    const assignedToMap=Object.fromEntries(AT.map(a=>[a.id,a]));
+    html+=`<div>
+      <div class="list-room-hdr${isCollapsed?' collapsed':''}" data-room="${esc(room)}">
+        <div class="list-room-hdr-left">
+          <span class="list-room-chevron">▾</span>
+          ${esc(room)}
+        </div>
+        <span class="list-room-count">${roomItems.length} item${roomItems.length!==1?'s':''}</span>
+      </div>
+      <div class="list-room-body" style="display:${isCollapsed?'none':'block'}">`;
+    for(const item of roomItems){
+      const isCo=item.type==='Change Order';
+      const badge=isCo?'<span class="badge badge-co">Change Order</span>':'<span class="badge badge-est">From Estimate</span>';
+      const assignee=item.assignedToId?assignedToMap[item.assignedToId]:null;
+      const hasCosts=item.budget!==null||item.actual!==null;
+      html+=`<div class="list-row${isCo?' co-row':''}">
+        <div class="list-row-main">
+          <div class="list-row-name">${esc(item.scope)}</div>
+          <div class="list-row-meta">${esc(item.group)} ${badge}${assignee?' · '+esc(assignee.name)+' ('+esc(assignee.type||'')+')'  :''}</div>
+          ${item.desc?`<div class="list-row-desc">${esc(item.desc)}</div>`:''}
+          ${hasCosts?`<div class="list-row-costs">
+            <div class="lrc-item"><div class="lrc-label">Budget</div><div class="lrc-val${item.budget===null?' empty':''}">${fmt(item.budget)}</div></div>
+            <div class="lrc-item"><div class="lrc-label">Actual</div><div class="lrc-val${item.actual===null?' empty':''}">${fmt(item.actual)}</div></div>
+          </div>`:''}
+        </div>
+        <div class="list-row-actions">
+          <button class="btn-sm" data-action="edit-scope" data-id="${item.id}">Edit</button>
+          <button class="btn-sm danger" data-action="del-scope" data-id="${item.id}">Delete</button>
+        </div>
+      </div>`;
+    }
+    html+=`</div></div>`;
+  }
+  document.getElementById('scope-list').innerHTML=html;
+}
+
+// collapse/expand room sections
+document.getElementById('scope-list').addEventListener('click',function(e){
+  const hdr=e.target.closest('.list-room-hdr');
+  if(hdr&&!e.target.closest('[data-action]')){
+    const room=hdr.dataset.room;
+    const body=hdr.nextElementSibling;
+    if(collapsedRooms.has(room)){collapsedRooms.delete(room);body.style.display='block';hdr.classList.remove('collapsed')}
+    else{collapsedRooms.add(room);body.style.display='none';hdr.classList.add('collapsed')}
+    return;
+  }
+  const editBtn=e.target.closest('[data-action="edit-scope"]');if(editBtn){openScopeEdit(editBtn.dataset.id);return}
+  const delBtn=e.target.closest('[data-action="del-scope"]');
+  if(delBtn){deleteScopeItem(delBtn.dataset.id);return}
+});
+
+// ── AT LIST ───────────────────────────────────────────────────────────────────
+function renderATList(){
+  if(!AT.length){document.getElementById('at-list').innerHTML='<div class="list-empty">No entries yet.</div>';return}
+  const typeColors={'Subcontractor':'#FDF0D8','Trinity Building Co (TBC)':'#EEF0E8','Owner':'#EDE8F0','TBD':'#F0EFEA'};
+  const typeText={'Subcontractor':'#9A6E20','Trinity Building Co (TBC)':'#4A6A4A','Owner':'#6A4A8A','TBD':'#8A8070'};
+  let html='<div style="padding:10px 14px;display:flex;flex-direction:column;gap:6px">';
+  for(const a of AT){
+    const bg=typeColors[a.type]||'#F5F2EE',tx=typeText[a.type]||'#8A8070';
+    html+=`<div class="list-row" style="padding:10px 14px">
+      <div class="list-row-main">
+        <div class="list-row-name">${esc(a.name)}</div>
+        ${a.type?`<span style="font-size:11px;padding:2px 7px;border-radius:2px;background:${bg};color:${tx};font-weight:500;display:inline-block;margin-top:3px">${esc(a.type)}</span>`:''}
+        ${a.notes?`<div class="list-row-desc" style="margin-top:4px">${esc(a.notes)}</div>`:''}
+      </div>
+      <div class="list-row-actions">
+        <button class="btn-sm danger" data-action="del-at" data-id="${a.id}">Remove</button>
+      </div>
+    </div>`;
+  }
+  html+='</div>';
+  document.getElementById('at-list').innerHTML=html;
+}
+
+// ── FILES LIST ────────────────────────────────────────────────────────────────
+function renderFilesList(){
+  const q=document.getElementById('files-search').value.toLowerCase().trim();
+  const roomF=document.getElementById('files-room-filter').value;
+  let items=FILES.filter(i=>{
+    if(roomF&&i.room!==roomF)return false;
+    if(q&&![i.name,i.room].join(' ').toLowerCase().includes(q))return false;
+    return true;
+  });
+  if(!items.length){document.getElementById('files-list').innerHTML='<div class="list-empty">No files linked yet.</div>';return}
+  let html='',lastRoom='';
+  for(const file of items){
+    if(file.room!==lastRoom){if(lastRoom)html+='</div>';html+=`<div class="list-room-hdr" style="cursor:default">${esc(file.room)}</div><div>`;lastRoom=file.room;}
+    html+=`<div class="list-row">
+      <div class="list-row-main">
+        <div class="list-row-name">📄 ${esc(file.name)}</div>
+        <div class="list-row-meta"><a href="${esc(file.url)}" target="_blank" style="color:#A08B5B">Open in Drive →</a></div>
+      </div>
+      <div class="list-row-actions"><button class="btn-sm danger" data-action="del-file" data-id="${file.id}">Remove</button></div>
+    </div>`;
+  }
+  if(lastRoom)html+='</div>';
+  document.getElementById('files-list').innerHTML=html;
+}
+
+// ── META — with edit buttons ──────────────────────────────────────────────────
+function renderMeta(){
+  const roomsEl=document.getElementById('rooms-list');
+  const groupsEl=document.getElementById('groups-list');
+  roomsEl.innerHTML=ROOMS.length?ROOMS.map(r=>`
+    <div class="meta-item">
+      <span class="meta-item-name">${esc(r)}</span>
+      <div class="meta-item-actions">
+        <button class="btn-sm" data-action="edit-room" data-name="${esc(r)}">Edit</button>
+        <button class="btn-sm danger" data-action="del-room" data-name="${esc(r)}">Remove</button>
+      </div>
+    </div>`).join(''):'<div class="list-empty">No rooms yet.</div>';
+  groupsEl.innerHTML=GROUPS.length?GROUPS.map(g=>`
+    <div class="meta-item">
+      <span class="meta-item-name">${esc(g)}</span>
+      <div class="meta-item-actions">
+        <button class="btn-sm" data-action="edit-group" data-name="${esc(g)}">Edit</button>
+        <button class="btn-sm danger" data-action="del-group" data-name="${esc(g)}">Remove</button>
+      </div>
+    </div>`).join(''):'<div class="list-empty">No scope areas yet.</div>';
+}
+
+// ── TYPE TOGGLES ──────────────────────────────────────────────────────────────
+function wireType(estId,coId,hiddenId){
+  document.getElementById(estId).addEventListener('click',()=>{
+    document.getElementById(hiddenId).value='Estimate';
+    document.getElementById(estId).className='type-opt active-est';
+    document.getElementById(coId).className='type-opt';
+  });
+  document.getElementById(coId).addEventListener('click',()=>{
+    document.getElementById(hiddenId).value='Change Order';
+    document.getElementById(coId).className='type-opt active-co';
+    document.getElementById(estId).className='type-opt';
+  });
+}
+wireType('type-est-btn','type-co-btn','f-type');
+document.getElementById('type-alt-btn').addEventListener('click',()=>{
+  document.getElementById('f-type').value='Alternate';
+  document.getElementById('type-est-btn').className='type-opt';
+  document.getElementById('type-co-btn').className='type-opt';
+  document.getElementById('type-alt-btn').className='type-opt active-est';
+});
+wireType('e-type-est-btn','e-type-co-btn','e-type');
+document.getElementById('e-type-alt-btn').addEventListener('click',()=>{
+  document.getElementById('e-type').value='Alternate';
+  document.getElementById('e-type-est-btn').className='type-opt';
+  document.getElementById('e-type-co-btn').className='type-opt';
+  document.getElementById('e-type-alt-btn').className='type-opt active-est';
+});
+
+// ── ADD SCOPE ─────────────────────────────────────────────────────────────────
+document.getElementById('btn-add-scope').addEventListener('click',async()=>{
+  const room=document.getElementById('f-room').value.trim();
+  const group=document.getElementById('f-group').value.trim();
+  const scope=document.getElementById('f-scope').value.trim();
+  const desc=document.getElementById('f-desc').value.trim();
+  const type=document.getElementById('f-type').value;
+  const budget=document.getElementById('f-budget').value.trim();
+  const actual=document.getElementById('f-actual').value.trim();
+  const assignedToId=document.getElementById('f-assigned').value||null;
+  if(!room||!group||!scope){toast('Room, Scope Area, and Scope Name are required.','error');return}
+  const btn=document.getElementById('btn-add-scope');btn.disabled=true;btn.textContent='Adding…';
+  try{
+    const res=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'addItem',item:{room,group,scope,desc,type,
+        budget:budget!==''?Number(budget):null,actual:actual!==''?Number(actual):null,assignedToId}})});
+    const data=await res.json();
+    SCOPE.push({id:data.id,room,group,scope,desc:desc||null,type,
+      budget:budget!==''?Number(budget):null,actual:actual!==''?Number(actual):null,assignedToId});
+    document.getElementById('f-scope').value='';
+    document.getElementById('f-desc').value='';
+    document.getElementById('f-budget').value='';
+    document.getElementById('f-actual').value='';
+    document.getElementById('f-assigned').value='';
+    document.getElementById('scope-subtitle').textContent=SCOPE.length+' items loaded';
+    renderScopeList();toast('Scope item added!');
+  }catch(e){toast('Could not save — check connection.','error')}
+  btn.disabled=false;btn.textContent='Add Scope Item';
+});
+
+// ── ADD AT ────────────────────────────────────────────────────────────────────
+document.getElementById('btn-add-at').addEventListener('click',async()=>{
+  const name=document.getElementById('at-name').value.trim();
+  const type=document.getElementById('at-type').value;
+  const notes=document.getElementById('at-notes').value.trim();
+  if(!name||!type){toast('Name and Type are required.','error');return}
+  const btn=document.getElementById('btn-add-at');btn.disabled=true;btn.textContent='Adding…';
+  try{
+    const res=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'addAssignedTo',entry:{name,type,notes}})});
+    const data=await res.json();
+    AT.push({id:data.id,name,type,notes:notes||null});
+    document.getElementById('at-name').value='';
+    document.getElementById('at-type').value='';
+    document.getElementById('at-notes').value='';
+    document.getElementById('at-subtitle').textContent=AT.length+' entr'+(AT.length!==1?'ies':'y');
+    populateAllDropdowns();renderATList();toast('Added!');
+  }catch(e){toast('Could not save — check connection.','error')}
+  btn.disabled=false;btn.textContent='Add to List';
+});
+
+// ── ADD FILE ──────────────────────────────────────────────────────────────────
+document.getElementById('btn-add-file').addEventListener('click',async()=>{
+  const room=document.getElementById('file-room').value.trim();
+  const name=document.getElementById('file-name').value.trim();
+  const url=document.getElementById('file-url').value.trim();
+  if(!room||!name||!url){toast('Room, File Name, and URL are required.','error');return}
+  const btn=document.getElementById('btn-add-file');btn.disabled=true;btn.textContent='Adding…';
+  try{
+    const res=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'addFile',file:{room,name,url}})});
+    const data=await res.json();
+    FILES.push({id:data.id,room,name,url});
+    document.getElementById('file-name').value='';
+    document.getElementById('file-url').value='';
+    document.getElementById('files-subtitle').textContent=FILES.length+' file'+(FILES.length!==1?'s':'');
+    renderFilesList();toast('File added!');
+  }catch(e){toast('Could not save — check connection.','error')}
+  btn.disabled=false;btn.textContent='Add File';
+});
+
+// ── ADD ROOM / GROUP ──────────────────────────────────────────────────────────
+document.getElementById('btn-add-room').addEventListener('click',async()=>{
+  const name=document.getElementById('new-room-input').value.trim();if(!name)return;
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'addRoom',name})});
+    ROOMS.push(name);ROOMS.sort();document.getElementById('new-room-input').value='';
+    populateAllDropdowns();renderMeta();toast('Room added!');
+  }catch(e){toast('Could not save — check connection.','error')}
+});
+document.getElementById('btn-add-group').addEventListener('click',async()=>{
+  const name=document.getElementById('new-group-input').value.trim();if(!name)return;
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'addGroup',name})});
+    GROUPS.push(name);GROUPS.sort();document.getElementById('new-group-input').value='';
+    populateAllDropdowns();renderMeta();toast('Scope area added!');
+  }catch(e){toast('Could not save — check connection.','error')}
+});
+
+// ── META EDIT MODAL ───────────────────────────────────────────────────────────
+function openMetaEdit(type,oldName){
+  editingMetaType=type;editingMetaOldName=oldName;
+  document.getElementById('meta-modal-title').textContent=type==='room'?'Edit Room / Location Name':'Edit Scope Area Name';
+  document.getElementById('meta-edit-val').value=oldName;
+  document.getElementById('meta-modal').classList.add('show');
+  setTimeout(()=>document.getElementById('meta-edit-val').focus(),50);
+}
+document.getElementById('meta-modal-cancel').addEventListener('click',()=>{document.getElementById('meta-modal').classList.remove('show')});
+document.getElementById('meta-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')});
+document.getElementById('meta-modal-save').addEventListener('click',async()=>{
+  const newName=document.getElementById('meta-edit-val').value.trim();
+  if(!newName||newName===editingMetaOldName){document.getElementById('meta-modal').classList.remove('show');return}
+  const btn=document.getElementById('meta-modal-save');btn.textContent='Saving…';
+  try{
+    // Delete old, add new
+    const delAction=editingMetaType==='room'?'deleteRoom':'deleteGroup';
+    const addAction=editingMetaType==='room'?'addRoom':'addGroup';
+    await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:delAction,name:editingMetaOldName})});
+    await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:addAction,name:newName})});
+    // Update local arrays
+    if(editingMetaType==='room'){ROOMS=ROOMS.filter(r=>r!==editingMetaOldName);ROOMS.push(newName);ROOMS.sort();
+      // Update existing scope items with old room name
+      SCOPE.forEach(i=>{if(i.room===editingMetaOldName)i.room=newName});
+    } else {GROUPS=GROUPS.filter(g=>g!==editingMetaOldName);GROUPS.push(newName);GROUPS.sort();
+      SCOPE.forEach(i=>{if(i.group===editingMetaOldName)i.group=newName});
+    }
+    populateAllDropdowns();renderMeta();renderScopeList();
+    document.getElementById('meta-modal').classList.remove('show');
+    toast('Name updated!');
+  }catch(e){toast('Could not save — check connection.','error')}
+  btn.textContent='Save';
+});
+
+// ── SCOPE EDIT MODAL ──────────────────────────────────────────────────────────
+function openScopeEdit(id){
+  const item=SCOPE.find(i=>i.id===id);if(!item)return;
+  editingScopeId=id;
+  document.getElementById('e-room').value=item.room;
+  document.getElementById('e-group').value=item.group;
+  document.getElementById('e-scope').value=item.scope;
+  document.getElementById('e-desc').value=item.desc||'';
+  document.getElementById('e-type').value=item.type||'Estimate';
+  document.getElementById('e-budget').value=item.budget!==null&&item.budget!==undefined?item.budget:'';
+  document.getElementById('e-actual').value=item.actual!==null&&item.actual!==undefined?item.actual:'';
+  document.getElementById('e-assigned').value=item.assignedToId||'';
+  document.getElementById('e-type-est-btn').className='type-opt'+(item.type==='Estimate'?' active-est':'');
+  document.getElementById('e-type-co-btn').className='type-opt'+(item.type==='Change Order'?' active-co':'');
+  document.getElementById('e-type-alt-btn').className='type-opt'+(item.type==='Alternate'?' active-est':'');
+  document.getElementById('scope-modal').classList.add('show');
+}
+document.getElementById('scope-modal-cancel').addEventListener('click',()=>{document.getElementById('scope-modal').classList.remove('show');editingScopeId=null});
+document.getElementById('scope-modal').addEventListener('click',function(e){if(e.target===this){this.classList.remove('show');editingScopeId=null}});
+document.getElementById('scope-modal-save').addEventListener('click',async()=>{
+  if(!editingScopeId)return;
+  const budget=document.getElementById('e-budget').value.trim();
+  const actual=document.getElementById('e-actual').value.trim();
+  const item={room:document.getElementById('e-room').value,group:document.getElementById('e-group').value,
+    scope:document.getElementById('e-scope').value.trim(),desc:document.getElementById('e-desc').value.trim(),
+    type:document.getElementById('e-type').value,
+    budget:budget!==''?Number(budget):null,actual:actual!==''?Number(actual):null,
+    assignedToId:document.getElementById('e-assigned').value||null};
+  if(!item.scope){toast('Scope name required.','error');return}
+  document.getElementById('scope-modal-save').textContent='Saving…';
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'editItem',id:editingScopeId,item})});
+    const idx=SCOPE.findIndex(i=>i.id===editingScopeId);
+    if(idx>-1)SCOPE[idx]={...SCOPE[idx],...item};
+    renderScopeList();document.getElementById('scope-modal').classList.remove('show');editingScopeId=null;toast('Changes saved.');
+  }catch(e){toast('Could not save — check connection.','error')}
+  document.getElementById('scope-modal-save').textContent='Save Changes';
+});
+
+async function deleteScopeItem(id){
+  const item=SCOPE.find(i=>i.id===id);if(!item||!confirm(`Delete "${item.scope}"?`))return;
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'deleteItem',id})});
+    SCOPE=SCOPE.filter(i=>i.id!==id);
+    document.getElementById('scope-subtitle').textContent=SCOPE.length+' items loaded';
+    renderScopeList();toast('Item deleted.');
+  }catch(e){toast('Could not delete — check connection.','error')}
+}
+
+// ── DELEGATED EVENTS ──────────────────────────────────────────────────────────
+document.addEventListener('click',async function(e){
+  const el=e.target;
+  if(el.closest('[data-action="edit-room"]')){openMetaEdit('room',el.closest('[data-action="edit-room"]').dataset.name);return}
+  if(el.closest('[data-action="edit-group"]')){openMetaEdit('group',el.closest('[data-action="edit-group"]').dataset.name);return}
+  const delAt=el.closest('[data-action="del-at"]');
+  if(delAt){
+    const entry=AT.find(a=>a.id===delAt.dataset.id);
+    if(!entry||!confirm(`Remove "${entry.name}"?`))return;
+    try{
+      await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'deleteAssignedTo',id:delAt.dataset.id})});
+      AT=AT.filter(a=>a.id!==delAt.dataset.id);
+      document.getElementById('at-subtitle').textContent=AT.length+' entr'+(AT.length!==1?'ies':'y');
+      populateAllDropdowns();renderATList();toast('Removed.');
+    }catch(e){toast('Could not delete.','error')}return;
+  }
+  const delFile=el.closest('[data-action="del-file"]');
+  if(delFile){
+    const file=FILES.find(f=>f.id===delFile.dataset.id);
+    if(!file||!confirm(`Remove "${file.name}"?`))return;
+    try{
+      await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'deleteFile',id:delFile.dataset.id})});
+      FILES=FILES.filter(f=>f.id!==delFile.dataset.id);
+      document.getElementById('files-subtitle').textContent=FILES.length+' file'+(FILES.length!==1?'s':'');
+      renderFilesList();toast('File removed.');
+    }catch(e){toast('Could not delete.','error')}return;
+  }
+  const delRoom=el.closest('[data-action="del-room"]');
+  if(delRoom){
+    if(!confirm(`Remove room "${delRoom.dataset.name}"? This does not delete scope items.`))return;
+    try{
+      await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'deleteRoom',name:delRoom.dataset.name})});
+      ROOMS=ROOMS.filter(r=>r!==delRoom.dataset.name);populateAllDropdowns();renderMeta();toast('Room removed.');
+    }catch(e){toast('Could not delete.','error')}return;
+  }
+  const delGroup=el.closest('[data-action="del-group"]');
+  if(delGroup){
+    if(!confirm(`Remove scope area "${delGroup.dataset.name}"? This does not delete scope items.`))return;
+    try{
+      await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'deleteGroup',name:delGroup.dataset.name})});
+      GROUPS=GROUPS.filter(g=>g!==delGroup.dataset.name);populateAllDropdowns();renderMeta();toast('Scope area removed.');
+    }catch(e){toast('Could not delete.','error')}return;
+  }
+});
+
+// ── SEARCH / FILTER LISTENERS ─────────────────────────────────────────────────
+document.getElementById('scope-search').addEventListener('input',renderScopeList);
+document.getElementById('scope-room-filter').addEventListener('change',renderScopeList);
+document.getElementById('scope-type-filter').addEventListener('change',renderScopeList);
+document.getElementById('files-search').addEventListener('input',renderFilesList);
+document.getElementById('files-room-filter').addEventListener('change',renderFilesList);
+document.getElementById('new-room-input').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('btn-add-room').click()});
+document.getElementById('new-group-input').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('btn-add-group').click()});
+
+loadAll();
+</script>
+</body>
+</html>

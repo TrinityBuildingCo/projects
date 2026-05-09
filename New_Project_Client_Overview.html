@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Estimate Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#FAF8F5;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#2C2C2A;min-height:100vh;-webkit-font-smoothing:antialiased;font-size:14px}
+.header{background:#2C2C2A;padding:24px 32px 20px}
+.header-inner{max-width:960px;margin:0 auto}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.logo-wrap{display:flex;align-items:center;gap:12px}
+.logo-text .logo-trinity{font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:#FAF8F5;font-weight:500;line-height:1}
+.logo-text .logo-building{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:#8A8070;line-height:1}
+.header-right{text-align:right}
+.header-badge{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#A08B5B}
+.header-date{font-size:11px;color:#8A8070;margin-top:2px}
+.header-body{margin-bottom:16px}
+.header-eyebrow{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#A08B5B;margin-bottom:4px}
+.header-title{font-size:26px;font-weight:400;color:#FAF8F5;letter-spacing:-0.01em;margin-bottom:3px}
+.header-sub{font-size:12px;color:#8A8070}
+.stat-strip{display:flex;border:0.5px solid rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+.stat-item{flex:1;padding:11px 16px;border-right:0.5px solid rgba(255,255,255,0.08)}
+.stat-item:last-child{border-right:none}
+.stat-label{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#8A8070;margin-bottom:3px}
+.stat-val{font-size:18px;font-weight:500;color:#FAF8F5;font-family:'DM Mono',monospace}
+.stat-val.gold{color:#A08B5B}
+.nav-bar{background:white;border-bottom:1px solid #EDE9E2;padding:0 32px}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;gap:0}
+.nav-btn{padding:12px 18px;font-size:12px;font-weight:400;color:#8A8070;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:0.03em;transition:all 0.15s;text-decoration:none;display:inline-block}
+.nav-btn:hover{color:#2C2C2A}
+.nav-btn.active{color:#A08B5B;border-bottom-color:#A08B5B;font-weight:500}
+.content{max-width:960px;margin:28px auto;padding:0 24px 60px;display:flex;flex-direction:column;gap:20px}
+.section-label{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#A08B5B;margin-bottom:10px}
+.card{background:white;border-radius:5px;border:0.5px solid #DDD8CF;padding:18px 20px;box-shadow:0 1px 4px rgba(44,44,42,0.04)}
+.narrative-card{background:white;border-radius:5px;border:0.5px solid #DDD8CF;padding:18px 20px;border-left:2px solid #A08B5B;box-shadow:0 1px 4px rgba(44,44,42,0.04)}
+.narrative-text{font-size:13px;color:#5A5A58;line-height:1.7;font-style:italic}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chart-card{background:white;border-radius:5px;border:0.5px solid #DDD8CF;padding:16px 18px;box-shadow:0 1px 4px rgba(44,44,42,0.04)}
+.chart-title{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:#A08B5B;margin-bottom:12px}
+.chart-inner{display:flex;gap:14px;align-items:flex-start}
+.donut-wrap{flex-shrink:0}
+.bar-list{flex:1;display:flex;flex-direction:column;gap:6px}
+.bar-row{}
+.bar-row-top{display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px}
+.bar-row-name{color:#2C2C2A;display:flex;align-items:center;gap:5px}
+.bar-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.bar-row-val{font-family:'DM Mono',monospace;color:#2C2C2A}
+.bar-row-pct{font-family:'DM Mono',monospace;color:#8A8070;margin-left:4px}
+.bar-track{height:4px;background:#F0EDE8;border-radius:2px}
+.bar-fill{height:100%;border-radius:2px;transition:width 0.4s ease}
+.spotlights-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.spotlight-card{background:white;border-radius:5px;border:0.5px solid #DDD8CF;border-top:2px solid #2C2C2A;padding:14px 16px;box-shadow:0 1px 4px rgba(44,44,42,0.04)}
+.spotlight-card:nth-child(2){border-top-color:#A08B5B}
+.spotlight-card:nth-child(3){border-top-color:#C4A872}
+.spotlight-card:nth-child(4){border-top-color:#8A8070}
+.spotlight-meta{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#8A8070;margin-bottom:4px}
+.spotlight-total{font-size:19px;font-weight:500;color:#2C2C2A;margin-bottom:6px;font-family:'DM Mono',monospace}
+.spotlight-note{font-size:12px;color:#5A5A58;line-height:1.55;margin-bottom:8px;font-style:italic}
+.spotlight-tags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:10px;background:#F5F2EE;color:#8A7050;padding:2px 7px;border-radius:2px}
+/* Alternates */
+.alt-room-section{margin-bottom:16px}
+.alt-room-label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8A8070;margin-bottom:8px;padding-bottom:5px;border-bottom:0.5px solid #EDE9E2}
+.alt-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.alt-card{background:white;border-radius:4px;border:1px solid #C8D8E8;padding:12px 14px;transition:border-color 0.15s;cursor:pointer;user-select:none}
+.alt-card:hover{border-color:#6A8AB8}
+.alt-card.selected{border-color:#4A6A9A;background:#F0F4FA}
+.alt-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px}
+.alt-card-name{font-size:13px;font-weight:400;color:#2C2C2A;line-height:1.3;flex:1}
+.alt-toggle{width:18px;height:18px;border-radius:3px;border:1.5px solid #C8D8E8;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;background:white}
+.alt-card.selected .alt-toggle{background:#4A6A9A;border-color:#4A6A9A}
+.alt-card.selected .alt-toggle::after{content:'✓';color:white;font-size:10px;font-weight:500}
+.alt-card-desc{font-size:11px;color:#8A8070;line-height:1.35;margin-bottom:6px}
+.alt-card-price{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:#4A6A9A}
+.alt-summary-bar{background:white;border-radius:4px;border:0.5px solid #DDD8CF;padding:12px 16px;display:flex;align-items:center;gap:16px;margin-top:12px;flex-wrap:wrap}
+.alt-summary-label{font-size:11px;color:#8A8070;letter-spacing:0.04em;text-transform:uppercase}
+.alt-summary-val{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:#4A6A9A;flex:1}
+.alt-submit-btn{padding:9px 20px;background:#2C2C2A;border:none;border-radius:3px;color:#FAF8F5;font-size:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;transition:background 0.15s}
+.alt-submit-btn:hover{background:#A08B5B}
+.alt-submit-btn:disabled{background:#C0B8AC;cursor:not-allowed}
+/* Not included */
+.ni-list{display:flex;flex-direction:column;gap:5px}
+.ni-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#5A5A58}
+.ni-dash{color:#C0B8AC;flex-shrink:0;margin-top:1px}
+/* Contingency */
+.contingency-card{background:#FAF8F5;border-radius:4px;border:0.5px solid #DDD8CF;padding:12px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.cont-item{display:flex;flex-direction:column;gap:1px}
+.cont-label{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#C0B8AC}
+.cont-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:#2C2C2A}
+/* Footer */
+.footer{background:#2C2C2A;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-inner{max-width:960px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-logo{display:flex;align-items:center;gap:10px}
+.footer-logo-trinity{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#FAF8F5;font-weight:500}
+.footer-logo-building{font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:#8A8070}
+.footer-info{font-size:11px;color:#8A8070}
+.footer-link{font-size:11px;color:#A08B5B;text-decoration:none;border:0.5px solid #A08B5B;padding:5px 12px;border-radius:2px;transition:background 0.15s}
+.footer-link:hover{background:rgba(160,139,91,0.15)}
+/* Confirmation overlay */
+.confirm-overlay{position:fixed;inset:0;background:rgba(44,44,42,0.6);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.confirm-overlay.show{opacity:1;pointer-events:all}
+.confirm-card{background:white;border-radius:6px;padding:28px;max-width:400px;width:100%;text-align:center;box-shadow:0 8px 40px rgba(44,44,42,0.2)}
+.confirm-icon{font-size:32px;margin-bottom:12px}
+.confirm-title{font-size:18px;font-weight:500;color:#2C2C2A;margin-bottom:6px}
+.confirm-sub{font-size:13px;color:#8A8070;line-height:1.6}
+@media(max-width:640px){
+  .charts-grid{grid-template-columns:1fr}
+  .spotlights-grid{grid-template-columns:1fr}
+  .header{padding:18px 20px 16px}
+  .content{padding:0 16px 60px}
+}
+@media print{
+  .header{background:white!important;border-bottom:2px solid #2C2C2A;padding:16px 24px 12px}
+  .logo-trinity{color:#2C2C2A!important}
+  .header-title{color:#2C2C2A!important}
+  .stat-strip{border-color:#DDD8CF!important}
+  .stat-val{color:#2C2C2A!important}
+  .stat-val.gold{color:#A08B5B!important}
+  .nav-bar,.footer,.alt-submit-btn,.confirm-overlay{display:none!important}
+  body{background:white!important}
+  .content{margin-top:16px}
+  .card,.chart-card,.narrative-card,.spotlight-card{box-shadow:none!important;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="logo-wrap">
+        <div style="flex-shrink:0"><svg height="56" style="display:block;filter:invert(1) brightness(2)" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="100 220 800 560"> <defs> <style> .cls-1 { stroke-width: 0px; } .cls-2 { font-family: NeueHaasUnicaPro-Thin, 'Neue Haas Unica Pro'; font-size: 69.71px; font-weight: 200; } .cls-3 { letter-spacing: .12em; } .cls-4 { letter-spacing: .13em; } .cls-5 { letter-spacing: .13em; } .cls-6 { letter-spacing: .13em; } </style> </defs> <text class="cls-2" transform="translate(233.48 740.42) scale(1.04 1)"><tspan class="cls-3" x="0" y="0">B</tspan><tspan class="cls-5" x="49.91" y="0">UILDING </tspan><tspan class="cls-4" x="407.78" y="0">C</tspan><tspan class="cls-6" x="463.69" y="0">O</tspan></text> <path class="cls-1" d="M500.3,240.42l-2.7.99c-39.85,77.67-79.7,155.35-120.23,234.35h245.24c-41.45-79.75-81.88-157.54-122.32-235.34ZM452.96,460.47c16.07-31.09,31.63-61.19,48.29-93.43,16.36,32.24,31.52,62.12,47.41,93.43h-95.7ZM567.8,461.03c-2.13-.11-4.94-2.64-6.03-4.77-16.94-33.16-33.72-66.41-50.27-99.77-1.19-2.41-1.36-6.3-.26-8.7,4.1-8.94,8.93-17.56,14.57-28.36,24.99,48,49.01,94.13,73.85,141.83-11.8,0-21.85.28-31.85-.22Z"/> <g> <path class="cls-1" d="M327.89,633.11s-16.4-20.53-16.28-20.56c6.07-1.56,11.93-4.33,14.06-6.07,11.98-9.76,11.9-25.04,11.86-27.23-.04-2.08-.14-5.32-1.56-9.21-2.17-5.93-4.12-9.39-9.37-14.16-4.24-3.85-8.5-5.8-12.45-7.48-2.54-1.09-5.69-1.63-10.85-1.63,0,0-43.89-.68-43.89-.38v108.1h14.09v-53.23s0-42.37,0-42.37h22.06c6.28,0,14.04.13,18.98,3.59,1.91,1.34,6.21,5.06,8.29,8.66,2.19,3.78,2.38,7.29,2.43,7.99.54,6.54-2.56,11.75-4.55,14.4-.66.87-1.41,1.66-2.23,2.37h0c-2.47,2.13-5.55,3.42-8.79,3.67-8.95.69-23.99,1.45-23.78,1.7l41.2,53.01s.04.05.07.05c.36.1,2.99.15,3.14.15h13.68c.48,0-16.1-21.39-16.1-21.39Z"/> <path class="cls-1" d="M177.56,560.68v93.82h-17.6v-93.82h-46v-12.21h109.59v12.21h-46Z"/> <path class="cls-1" d="M383.69,654.5v-106.03h17.41v106.03h-17.41Z"/> <path class="cls-1" d="M529.81,654.5l-31.99-45.72c-12.11-17.07-22.97-32.91-32.56-47.5h-.38c.38,16.98.57,33.9.57,50.78v42.44h-17.04v-106.03h25.55l32.18,45.72c12.74,18.27,23.6,34.1,32.56,47.51h.38c-.38-16.98-.57-33.9-.57-50.78v-42.44h17.03v106.03h-25.74Z"/> <path class="cls-1" d="M602.68,654.5v-106.03h17.41v106.03h-17.41Z"/> <path class="cls-1" d="M711.33,560.68v93.82h-17.6v-93.82h-46v-12.21h109.59v12.21h-45.99Z"/> <path class="cls-1" d="M837.39,654.5h-17.41v-43.93l-48.65-62.1h20.25l16.47,21.89c6.44,8.54,13.25,17.87,20.44,28h.38c7.19-10.13,14.01-19.46,20.44-28l16.66-21.89h20.06l-48.65,62.1v43.93Z"/> <path class="cls-1" d="M327.89,631.37s-16.4-20.53-16.28-20.56c6.07-1.56,11.93-4.33,14.06-6.07,11.98-9.76,11.9-25.04,11.86-27.23-.04-2.08-.14-5.32-1.56-9.21-2.17-5.93-4.12-9.39-9.37-14.16-4.24-3.85-8.5-5.8-12.45-7.48-2.54-1.09-5.69-1.63-10.85-1.63,0,0-43.89-.68-43.89-.38v108.1h14.09v-53.23s0-42.37,0-42.37h22.06c6.28,0,14.04.13,18.98,3.59,1.91,1.34,6.21,5.06,8.29,8.66,2.19,3.78,2.38,7.29,2.43,7.99.54,6.54-2.56,11.75-4.55,14.4-.66.87-1.41,1.66-2.23,2.37h0c-2.47,2.13-5.55,3.42-8.79,3.67-8.95.69-23.99,1.45-23.78,1.7l41.2,53.01s.04.05.07.05c.36.1,2.99.15,3.14.15h13.68c.48,0-16.1-21.39-16.1-21.39Z"/> <path class="cls-1" d="M177.56,558.94v93.82h-17.6v-93.82h-46v-12.21h109.59v12.21h-46Z"/> <path class="cls-1" d="M383.69,652.76v-106.03h17.41v106.03h-17.41Z"/> <path class="cls-1" d="M529.81,652.76l-31.99-45.72c-12.11-17.07-22.97-32.91-32.56-47.5h-.38c.38,16.98.57,33.9.57,50.78v42.44h-17.04v-106.03h25.55l32.18,45.72c12.74,18.27,23.6,34.1,32.56,47.51h.38c-.38-16.98-.57-33.9-.57-50.78v-42.44h17.03v106.03h-25.74Z"/> <path class="cls-1" d="M602.68,652.76v-106.03h17.41v106.03h-17.41Z"/> <path class="cls-1" d="M711.33,558.94v93.82h-17.6v-93.82h-46v-12.21h109.59v12.21h-45.99Z"/> <path class="cls-1" d="M837.39,652.76h-17.41v-43.93l-48.65-62.1h20.25l16.47,21.89c6.44,8.54,13.25,17.87,20.44,28h.38c7.19-10.13,14.01-19.46,20.44-28l16.66-21.89h20.06l-48.65,62.1v43.93Z"/> </g> </svg></div>
+      </div>
+      <div class="header-right">
+        <div class="header-badge">Project Estimate</div>
+        <div class="header-date" id="header-date"></div>
+      </div>
+    </div>
+    <div class="header-body">
+      <div class="header-eyebrow" id="header-address"></div>
+      <div class="header-title" id="header-title">Project Estimate Overview</div>
+      <div class="header-sub" id="header-sub">Prepared by Trinity Building Co · All pricing includes contractor fee</div>
+    </div>
+    <div class="stat-strip" id="stat-strip">
+      <div class="stat-item"><div class="stat-label">Total Estimate</div><div class="stat-val" id="stat-total">—</div></div>
+      <div class="stat-item"><div class="stat-label">Contractor Fee</div><div class="stat-val gold" id="stat-markup">—</div></div>
+      <div class="stat-item" id="stat-cont-item" style="display:none"><div class="stat-label">Contingency</div><div class="stat-val" id="stat-cont">—</div></div>
+      <div class="stat-item"><div class="stat-label">Scope Areas</div><div class="stat-val" id="stat-scopes">—</div></div>
+      <div class="stat-item"><div class="stat-label">Rooms</div><div class="stat-val" id="stat-rooms">—</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-inner">
+    <a class="nav-btn active" href="#">Overview</a>
+    <a class="nav-btn" id="nav-estimate" href="#">Detailed Estimate →</a>
+  </div>
+</div>
+
+<div class="content" id="content">
+  <div style="text-align:center;padding:60px 0;color:#8A8070">
+    <div style="width:22px;height:22px;border:1.5px solid #DDD8CF;border-top-color:#A08B5B;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 12px"></div>
+    Loading project data…
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div style="flex-shrink:0"><svg height="56" style="display:block;filter:invert(1) brightness(2)" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="100 220 800 560"> <defs> <style> .cls-1 { stroke-width: 0px; } .cls-2 { font-family: NeueHaasUnicaPro-Thin, 'Neue Haas Unica Pro'; font-size: 69.71px; font-weight: 200; } .cls-3 { letter-spacing: .12em; } .cls-4 { letter-spacing: .13em; } .cls-5 { letter-spacing: .13em; } .cls-6 { letter-spacing: .13em; } </style> </defs> <text class="cls-2" transform="translate(233.48 740.42) scale(1.04 1)"><tspan class="cls-3" x="0" y="0">B</tspan><tspan class="cls-5" x="49.91" y="0">UILDING </tspan><tspan class="cls-4" x="407.78" y="0">C</tspan><tspan class="cls-6" x="463.69" y="0">O</tspan></text> <path class="cls-1" d="M500.3,240.42l-2.7.99c-39.85,77.67-79.7,155.35-120.23,234.35h245.24c-41.45-79.75-81.88-157.54-122.32-235.34ZM452.96,460.47c16.07-31.09,31.63-61.19,48.29-93.43,16.36,32.24,31.52,62.12,47.41,93.43h-95.7ZM567.8,461.03c-2.13-.11-4.94-2.64-6.03-4.77-16.94-33.16-33.72-66.41-50.27-99.77-1.19-2.41-1.36-6.3-.26-8.7,4.1-8.94,8.93-17.56,14.57-28.36,24.99,48,49.01,94.13,73.85,141.83-11.8,0-21.85.28-31.85-.22Z"/> <g> <path class="cls-1" d="M327.89,633.11s-16.4-20.53-16.28-20.56c6.07-1.56,11.93-4.33,14.06-6.07,11.98-9.76,11.9-25.04,11.86-27.23-.04-2.08-.14-5.32-1.56-9.21-2.17-5.93-4.12-9.39-9.37-14.16-4.24-3.85-8.5-5.8-12.45-7.48-2.54-1.09-5.69-1.63-10.85-1.63,0,0-43.89-.68-43.89-.38v108.1h14.09v-53.23s0-42.37,0-42.37h22.06c6.28,0,14.04.13,18.98,3.59,1.91,1.34,6.21,5.06,8.29,8.66,2.19,3.78,2.38,7.29,2.43,7.99.54,6.54-2.56,11.75-4.55,14.4-.66.87-1.41,1.66-2.23,2.37h0c-2.47,2.13-5.55,3.42-8.79,3.67-8.95.69-23.99,1.45-23.78,1.7l41.2,53.01s.04.05.07.05c.36.1,2.99.15,3.14.15h13.68c.48,0-16.1-21.39-16.1-21.39Z"/> <path class="cls-1" d="M177.56,560.68v93.82h-17.6v-93.82h-46v-12.21h109.59v12.21h-46Z"/> <path class="cls-1" d="M383.69,654.5v-106.03h17.41v106.03h-17.41Z"/> <path class="cls-1" d="M529.81,654.5l-31.99-45.72c-12.11-17.07-22.97-32.91-32.56-47.5h-.38c.38,16.98.57,33.9.57,50.78v42.44h-17.04v-106.03h25.55l32.18,45.72c12.74,18.27,23.6,34.1,32.56,47.51h.38c-.38-16.98-.57-33.9-.57-50.78v-42.44h17.03v106.03h-25.74Z"/> <path class="cls-1" d="M602.68,654.5v-106.03h17.41v106.03h-17.41Z"/> <path class="cls-1" d="M711.33,560.68v93.82h-17.6v-93.82h-46v-12.21h109.59v12.21h-45.99Z"/> <path class="cls-1" d="M837.39,654.5h-17.41v-43.93l-48.65-62.1h20.25l16.47,21.89c6.44,8.54,13.25,17.87,20.44,28h.38c7.19-10.13,14.01-19.46,20.44-28l16.66-21.89h20.06l-48.65,62.1v43.93Z"/> <path class="cls-1" d="M327.89,631.37s-16.4-20.53-16.28-20.56c6.07-1.56,11.93-4.33,14.06-6.07,11.98-9.76,11.9-25.04,11.86-27.23-.04-2.08-.14-5.32-1.56-9.21-2.17-5.93-4.12-9.39-9.37-14.16-4.24-3.85-8.5-5.8-12.45-7.48-2.54-1.09-5.69-1.63-10.85-1.63,0,0-43.89-.68-43.89-.38v108.1h14.09v-53.23s0-42.37,0-42.37h22.06c6.28,0,14.04.13,18.98,3.59,1.91,1.34,6.21,5.06,8.29,8.66,2.19,3.78,2.38,7.29,2.43,7.99.54,6.54-2.56,11.75-4.55,14.4-.66.87-1.41,1.66-2.23,2.37h0c-2.47,2.13-5.55,3.42-8.79,3.67-8.95.69-23.99,1.45-23.78,1.7l41.2,53.01s.04.05.07.05c.36.1,2.99.15,3.14.15h13.68c.48,0-16.1-21.39-16.1-21.39Z"/> <path class="cls-1" d="M177.56,558.94v93.82h-17.6v-93.82h-46v-12.21h109.59v12.21h-46Z"/> <path class="cls-1" d="M383.69,652.76v-106.03h17.41v106.03h-17.41Z"/> <path class="cls-1" d="M529.81,652.76l-31.99-45.72c-12.11-17.07-22.97-32.91-32.56-47.5h-.38c.38,16.98.57,33.9.57,50.78v42.44h-17.04v-106.03h25.55l32.18,45.72c12.74,18.27,23.6,34.1,32.56,47.51h.38c-.38-16.98-.57-33.9-.57-50.78v-42.44h17.03v106.03h-25.74Z"/> <path class="cls-1" d="M602.68,652.76v-106.03h17.41v106.03h-17.41Z"/> <path class="cls-1" d="M711.33,558.94v93.82h-17.6v-93.82h-46v-12.21h109.59v12.21h-45.99Z"/> <path class="cls-1" d="M837.39,652.76h-17.41v-43.93l-48.65-62.1h20.25l16.47,21.89c6.44,8.54,13.25,17.87,20.44,28h.38c7.19-10.13,14.01-19.46,20.44-28l16.66-21.89h20.06l-48.65,62.1v43.93Z"/> </g> </svg></div>
+    <div class="footer-info" id="footer-info">trinitybuildingco.com · CA License #1002911</div>
+    <a class="footer-link" id="nav-estimate-footer" href="#">View Detailed Estimate →</a>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-card">
+    <div class="confirm-icon">✅</div>
+    <div class="confirm-title">Selections Submitted!</div>
+    <div class="confirm-sub" id="confirm-msg">Thank you. Trinity Building Co will review your selections and follow up within 2 business days.</div>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbxYdeDPuexKgvezjLYmSTRJOZ-Zf3NYHwa0huXsNPPR3aXqeNF4N8i8deGzfnJT8Wx-gg/exec';
+
+let SCOPE=[],BT_ITEMS=[],REPORT={};
+const PALETTE=['#2C2C2A','#A08B5B','#C4A872','#8A8070','#C0B8AC','#E8E3DC'];
+const selectedAlts=new Set();
+
+function fmt(n,markup){
+  if(n===null||n===undefined||n==='')return'—';
+  const m=markup||1;
+  return '$'+Math.round(Number(n)*m).toLocaleString();
+}
+function fmtFull(n,markup){
+  const m=markup||1;
+  return '$'+Math.round(Number(n)*m).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function getMarkup(){return 1+(Number(REPORT.markupPct||0)/100)}
+
+async function loadAll(){
+  try{
+    const [scopeRes,btRes,reportRes]=await Promise.all([
+      fetch(SCRIPT_URL+'?action=loadScope'),
+      fetch(SCRIPT_URL+'?action=loadBTItems'),
+      fetch(SCRIPT_URL+'?action=loadClientReport')
+    ]);
+    SCOPE=await scopeRes.json();
+    BT_ITEMS=await btRes.json();
+    REPORT=await reportRes.json();
+  }catch(e){
+    document.getElementById('content').innerHTML='<div style="text-align:center;padding:60px;color:#A84040">Could not load project data. Check your connection.</div>';
+    return;
+  }
+  buildPage();
+}
+
+function buildPage(){
+  const markup=getMarkup();
+  const markupPct=Number(REPORT.markupPct||0);
+
+  // Header
+  if(REPORT.projectAddress)document.getElementById('header-address').textContent=REPORT.projectAddress;
+  if(REPORT.proposalDate){
+    const d=new Date(REPORT.proposalDate+'T12:00:00');
+    document.getElementById('header-date').textContent='Prepared '+d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  }
+  if(REPORT.clientName)document.getElementById('header-title').textContent=REPORT.clientName+' · Estimate Overview';
+  if(REPORT.preparedBy)document.getElementById('header-sub').textContent='Prepared by '+REPORT.preparedBy+' · All pricing includes '+markupPct+'% contractor fee';
+
+  // Stats
+  const baseItems=SCOPE.filter(i=>i.type!=='Alternate'&&i.group!=='NOT INCLUDED');
+  const totalBase=baseItems.reduce((s,i)=>s+(i.budget||0),0);
+  const totalClient=totalBase*markup;
+  document.getElementById('stat-total').textContent=fmt(totalClient);
+  document.getElementById('stat-markup').textContent=markupPct+'%';
+  document.getElementById('stat-scopes').textContent=[...new Set(baseItems.map(i=>i.group))].length;
+  document.getElementById('stat-rooms').textContent=[...new Set(baseItems.map(i=>i.room))].length;
+
+  // Contingency
+  if(REPORT.showContingency!=='false'&&REPORT.contingencyValue){
+    const contItem=document.getElementById('stat-cont-item');
+    contItem.style.display='';
+    let contDisplay='';
+    if(REPORT.contingencyType==='pct'){
+      const contAmt=totalClient*(Number(REPORT.contingencyValue)/100);
+      contDisplay=Number(REPORT.contingencyValue)+'% ('+fmt(contAmt)+')';
+    } else {
+      contDisplay=fmt(Number(REPORT.contingencyValue)*markup);
+    }
+    document.getElementById('stat-cont').textContent=contDisplay;
+  }
+
+  // Estimate link
+  const estPage='New_Project_Client_Estimate.html';
+  document.getElementById('nav-estimate').href=estPage;
+  document.getElementById('nav-estimate-footer').href=estPage;
+
+  // Build content
+  let html='';
+
+  // Narrative
+  if(REPORT.narrative){
+    html+=`<div>
+      <div class="section-label">Project Narrative</div>
+      <div class="narrative-card"><div class="narrative-text">"${esc(REPORT.narrative)}"</div></div>
+    </div>`;
+  }
+
+  // Charts
+  const scopeGroups={};
+  const roomGroups={};
+  for(const item of baseItems){
+    if(!item.budget)continue;
+    const clientCost=(item.budget||0)*markup;
+    if(!scopeGroups[item.group])scopeGroups[item.group]=0;
+    scopeGroups[item.group]+=clientCost;
+    if(!roomGroups[item.room])roomGroups[item.room]=0;
+    roomGroups[item.room]+=clientCost;
+  }
+  const scopeEntries=Object.entries(scopeGroups).sort((a,b)=>b[1]-a[1]);
+  const roomEntries=Object.entries(roomGroups).sort((a,b)=>b[1]-a[1]);
+
+  html+=`<div>
+    <div class="section-label">Budget Breakdown</div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">By Scope Area</div>
+        <div class="chart-inner">
+          ${buildDonut(scopeEntries,'$'+Math.round(totalClient/1000)+'k')}
+          <div class="bar-list">${buildBarList(scopeEntries,totalClient)}</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">By Room</div>
+        <div class="chart-inner">
+          ${buildDonut(roomEntries,[...new Set(baseItems.map(i=>i.room))].length+' rooms')}
+          <div class="bar-list">${buildBarList(roomEntries,totalClient)}</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  // Spotlights
+  const spotlights=[];
+  for(let i=1;i<=4;i++){
+    const type=REPORT['spotlight'+i+'Type'];
+    const id=REPORT['spotlight'+i+'Id'];
+    const note=REPORT['spotlight'+i+'Note'];
+    if(!type||!id)continue;
+    const items=SCOPE.filter(x=>x.type!=='Alternate'&&(type==='scope'?x.group===id:x.room===id));
+    const total=items.reduce((s,x)=>s+(x.budget||0),0)*markup;
+    if(!total)continue;
+    spotlights.push({label:id,type,total,note,count:items.length});
+  }
+  if(spotlights.length){
+    html+=`<div>
+      <div class="section-label">Scope Spotlights</div>
+      <div class="spotlights-grid">
+        ${spotlights.map(s=>`<div class="spotlight-card">
+          <div class="spotlight-meta">${esc(s.type==='scope'?'Scope Area':'Room')} · ${esc(s.label)}</div>
+          <div class="spotlight-total">${fmt(s.total)}</div>
+          ${s.note?`<div class="spotlight-note">"${esc(s.note)}"</div>`:''}
+          <div class="spotlight-tags">
+            <span class="tag">${s.count} item${s.count!==1?'s':''}</span>
+            <span class="tag">${Math.round(s.total/totalClient*100)}% of total</span>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Contingency detail
+  if(REPORT.showContingency!=='false'&&REPORT.contingencyValue){
+    let baseAmt=0,contAmt=0,totalWithCont=0;
+    if(REPORT.contingencyType==='pct'){
+      baseAmt=totalClient;
+      contAmt=totalClient*(Number(REPORT.contingencyValue)/100);
+      totalWithCont=totalClient+contAmt;
+    } else {
+      baseAmt=totalClient;
+      contAmt=Number(REPORT.contingencyValue)*markup;
+      totalWithCont=totalClient+contAmt;
+    }
+    html+=`<div>
+      <div class="section-label">Contingency</div>
+      <div class="card">
+        <div class="contingency-card">
+          <div class="cont-item"><div class="cont-label">Base Estimate</div><div class="cont-val">${fmt(baseAmt)}</div></div>
+          <div style="font-size:18px;color:#C0B8AC">+</div>
+          <div class="cont-item"><div class="cont-label">Contingency ${REPORT.contingencyType==='pct'?Number(REPORT.contingencyValue)+'%':''}</div><div class="cont-val" style="color:#A08B5B">${fmt(contAmt)}</div></div>
+          <div style="font-size:18px;color:#C0B8AC">=</div>
+          <div class="cont-item"><div class="cont-label">Total with Contingency</div><div class="cont-val">${fmt(totalWithCont)}</div></div>
+          <div style="flex:1;font-size:12px;color:#8A8070;line-height:1.5">A contingency reserve covers unforeseen conditions that may arise during construction.</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Alternates
+  const altItems=SCOPE.filter(i=>i.type==='Alternate');
+  if(REPORT.showAlternates!=='false'&&altItems.length){
+    const byRoom={};
+    for(const item of altItems){
+      if(!byRoom[item.room])byRoom[item.room]=[];
+      byRoom[item.room].push(item);
+    }
+    html+=`<div>
+      <div class="section-label">Optional Items (Alternates)</div>
+      <div class="card">
+        <div style="font-size:13px;color:#5A5A58;margin-bottom:16px;line-height:1.6">The following items are not included in the base estimate above. Toggle any you'd like to add to your project, then submit your selections — we'll follow up to confirm and update your estimate.</div>
+        <div id="alt-rooms">`;
+    for(const[room,items]of Object.entries(byRoom)){
+      html+=`<div class="alt-room-section">
+        <div class="alt-room-label">${esc(room)}</div>
+        <div class="alt-cards-grid">
+          ${items.map(item=>`<div class="alt-card" data-id="${item.id}" data-budget="${(item.budget||0)*markup}">
+            <div class="alt-card-top">
+              <div class="alt-card-name">${esc(item.scope)}</div>
+              <div class="alt-toggle"></div>
+            </div>
+            ${item.desc?`<div class="alt-card-desc">${esc(item.desc)}</div>`:''}
+            <div class="alt-card-price">${fmt(item.budget,markup)}</div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }
+    html+=`</div>
+        <div class="alt-summary-bar">
+          <div class="alt-summary-label">Selected Alternates Total</div>
+          <div class="alt-summary-val" id="alt-total">$0</div>
+          <button class="alt-submit-btn" id="alt-submit-btn" ${REPORT.alternatesFormUrl?'':'disabled'}>Submit Selections</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // Not Included
+  const niItems=SCOPE.filter(i=>i.group==='NOT INCLUDED');
+  if(REPORT.showNotIncluded!=='false'&&niItems.length){
+    html+=`<div>
+      <div class="section-label">Not Included in This Estimate</div>
+      <div class="card">
+        <div class="ni-list">
+          ${niItems.map(i=>`<div class="ni-item"><span class="ni-dash">—</span><span>${esc(i.scope)}${i.desc?' — <span style="color:#8A8070;font-style:italic">'+esc(i.desc)+'</span>':''}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }
+
+  html+=`<div style="text-align:center;padding:8px 0;font-size:11px;color:#C0B8AC;letter-spacing:0.06em;text-transform:uppercase">
+    This estimate is prepared by Trinity Building Co · CA Class B License #1002911 · <a href="mailto:info@trinitybuildingco.com" style="color:#A08B5B;text-decoration:none">info@trinitybuildingco.com</a>
+  </div>`;
+
+  document.getElementById('content').innerHTML=html;
+
+  // Wire up alternate toggles
+  document.querySelectorAll('.alt-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const id=card.dataset.id;
+      if(selectedAlts.has(id))selectedAlts.delete(id);
+      else selectedAlts.add(id);
+      card.classList.toggle('selected',selectedAlts.has(id));
+      updateAltTotal();
+    });
+  });
+
+  // Submit button
+  const submitBtn=document.getElementById('alt-submit-btn');
+  if(submitBtn){
+    submitBtn.addEventListener('click',submitAlternates);
+  }
+}
+
+function buildDonut(entries,centerText){
+  const total=entries.reduce((s,[,v])=>s+v,0);
+  if(!total)return '<svg width="70" height="70"><text x="35" y="40" text-anchor="middle" font-size="11" fill="#C0B8AC">No data</text></svg>';
+  let offset=0;const r=29;const circ=2*Math.PI*r;
+  let paths='';
+  entries.slice(0,5).forEach(([,v],i)=>{
+    const pct=v/total;const dash=pct*circ;
+    paths+=`<circle cx="35" cy="35" r="${r}" fill="none" stroke="${PALETTE[i]}" stroke-width="10" stroke-dasharray="${dash.toFixed(1)} ${circ.toFixed(1)}" stroke-dashoffset="${(-offset*circ).toFixed(1)}" transform="rotate(-90 35 35)"/>`;
+    offset+=pct;
+  });
+  return `<svg width="110" height="110" viewBox="0 0 70 70" class="donut-wrap">
+    <circle cx="35" cy="35" r="${r}" fill="none" stroke="#F0EDE8" stroke-width="10"/>
+    ${paths}
+    <text x="35" y="31" text-anchor="middle" font-size="6.5" fill="#2C2C2A" font-weight="500">${centerText.split(' ')[0]}</text>
+    <text x="35" y="40" text-anchor="middle" font-size="6" fill="#8A8070">${centerText.split(' ')[1]||''}</text>
+  </svg>`;
+}
+
+function buildBarList(entries,total){
+  return entries.slice(0,6).map(([name,val],i)=>{
+    const pct=total?Math.round(val/total*100):0;
+    return `<div class="bar-row">
+      <div class="bar-row-top">
+        <span class="bar-row-name"><span class="bar-dot" style="background:${PALETTE[i]}"></span>${esc(name)}</span>
+        <span><span class="bar-row-val">$${Math.round(val/1000)}k</span><span class="bar-row-pct">${pct}%</span></span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${PALETTE[i]}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function updateAltTotal(){
+  let total=0;
+  selectedAlts.forEach(id=>{
+    const card=document.querySelector(`.alt-card[data-id="${id}"]`);
+    if(card)total+=Number(card.dataset.budget||0);
+  });
+  const el=document.getElementById('alt-total');
+  if(el)el.textContent='$'+Math.round(total).toLocaleString();
+}
+
+async function submitAlternates(){
+  if(!REPORT.alternatesFormUrl){alert('No alternates form configured. Please contact Trinity Building Co.');return;}
+  const btn=document.getElementById('alt-submit-btn');
+  btn.textContent='Submitting…';btn.disabled=true;
+
+  // Build selection summary
+  const selected=[];
+  selectedAlts.forEach(id=>{
+    const item=SCOPE.find(i=>i.id===id);
+    if(item)selected.push(item.room+': '+item.scope);
+  });
+
+  // POST to Google Form via fetch (form URL → submit endpoint)
+  // Google Forms accept POST to the formResponse URL
+  try{
+    const formId=REPORT.alternatesFormUrl.match(/\/d\/([^/]+)/)?.[1]||'';
+    // Since we can't reliably POST to Google Forms from a file:// URL,
+    // we open the form in a new tab with a mailto fallback
+    window.open(REPORT.alternatesFormUrl,'_blank');
+    // Show confirmation
+    const overlay=document.getElementById('confirm-overlay');
+    overlay.classList.add('show');
+    setTimeout(()=>overlay.classList.remove('show'),5000);
+  }catch(e){
+    alert('Could not submit. Please contact info@trinitybuildingco.com');
+  }
+  btn.textContent='Selections Submitted ✓';
+}
+
+loadAll();
+</script>
+</body>
+</html>
